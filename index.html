@@ -38,7 +38,7 @@
 <body class="flex flex-col items-center justify-center min-h-screen p-4">
 
     <!-- Main Container Card -->
-    <div id="main-card" class="card w-full max-w-sm mx-auto p-6 md:p-8 space-y-6">
+    <div id="main-card" class="card w-full max-w-sm mx-auto p-6 md:p-8 space-y-6 transition-all duration-300 ease-in-out">
 
         <!-- Header -->
         <div class="flex items-center space-x-2">
@@ -104,7 +104,7 @@
     </div>
 
     <!-- Analysis Results Card (Initially hidden) -->
-    <div id="results-card" class="card w-full max-w-sm mx-auto p-6 md:p-8 space-y-6 mt-6 hidden">
+    <div id="results-card" class="card w-full max-w-sm mx-auto p-6 md:p-8 space-y-6 mt-6 hidden transition-all duration-300 ease-in-out">
         <button id="back-button" class="flex items-center text-gray-400 hover:text-purple-400 transition-colors duration-200 mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
             Back
@@ -231,19 +231,42 @@
             } else {
                 messageBox.classList.add('bg-blue-500', 'text-white');
             }
-        }
-        
-        // This function will handle switching the view
-        function showResultsPage(data) {
-            mainCard.classList.add('hidden');
-            resultsCard.classList.remove('hidden');
-            displayResults(data);
+            messageBox.style.display = 'block'; // Ensure the message box is visible
         }
 
-        // Event listener for the back button to return to the main page
+        // Smooth page transition handler
+        function animatePageTransition(showEl, hideEl, direction = "forward") {
+            // direction: "forward" = slide in from right, "backward" = slide in from left
+            const outTranslate = direction === "forward" ? "-translate-x-10" : "translate-x-10";
+            const inTranslate  = direction === "forward" ? "translate-x-10" : "-translate-x-10";
+
+            // Prepare show element
+            showEl.classList.remove("hidden");
+            showEl.classList.add("opacity-0", inTranslate);
+
+            // Animate hide element out
+            hideEl.classList.add(outTranslate, "opacity-0");
+            hideEl.classList.remove("opacity-100");
+
+            setTimeout(() => {
+                hideEl.classList.add("hidden");
+                hideEl.classList.remove(outTranslate);
+
+                // Animate show element in
+                showEl.classList.remove("opacity-0", inTranslate);
+                showEl.classList.add("opacity-100");
+            }, 300); // matches Tailwind duration
+        }
+
+        // This function now animates instead of instantly swapping
+        function showResultsPage(data) {
+            displayResults(data);
+            animatePageTransition(resultsCard, mainCard, "forward");
+        }
+
+        // Back button animates in reverse
         backButton.addEventListener('click', () => {
-            resultsCard.classList.add('hidden');
-            mainCard.classList.remove('hidden');
+            animatePageTransition(mainCard, resultsCard, "backward");
         });
 
         cameraButton.addEventListener('click', () => fileInput.click());
