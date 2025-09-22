@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,34 +8,41 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #171725;
             color: #E2E8F0;
         }
+
         .card {
             background-color: #212134;
             border-radius: 1rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
             border: 1px solid #33334e;
         }
+
         .gradient-button {
             background-image: linear-gradient(to right, #6D28D9, #4C1D95);
         }
+
         .gradient-border-btn {
             background-color: transparent;
             border: 1px solid #6D28D9;
         }
+
         .gradient-text {
             background: -webkit-linear-gradient(right, #6D28D9, #4C1D95);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         .icon {
             filter: invert(1);
         }
     </style>
 </head>
+
 <body class="flex flex-col items-center justify-center min-h-screen p-4">
 
     <!-- Main Container Card -->
@@ -42,25 +50,42 @@
 
         <!-- Header -->
         <div class="flex items-center space-x-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+            </svg>
             <h1 class="text-2xl font-bold text-white">ZikLabs</h1>
         </div>
 
         <!-- Image Upload Section -->
         <div class="card p-4 space-y-4">
             <div class="flex items-center justify-center space-x-2 text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM1.5 12C1.5 6.201 6.201 1.5 12 1.5S22.5 6.201 22.5 12 17.799 22.5 12 22.5 1.5 17.799 1.5 12Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM1.5 12C1.5 6.201 6.201 1.5 12 1.5S22.5 6.201 22.5 12 17.799 22.5 12 22.5 1.5 17.799 1.5 12Z" />
+                </svg>
                 <span class="font-bold text-white">Add Equipment Image</span>
             </div>
             <p class="text-xs text-center text-gray-400">Clear, well-lit photos ensure accurate analysis</p>
 
             <div class="flex flex-col items-center space-y-2">
-                <button id="camera-button" class="w-full py-3 text-white font-semibold rounded-lg gradient-button shadow-md hover:opacity-90 transition-opacity duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h5l2-2h6l2 2h5v15c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm8 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/><circle cx="12" cy="14" r="3"/></svg>
+                <button id="camera-button"
+                    class="w-full py-3 text-white font-semibold rounded-lg gradient-button shadow-md hover:opacity-90 transition-opacity duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path
+                            d="M4 4h5l2-2h6l2 2h5v15c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm8 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+                        <circle cx="12" cy="14" r="3" />
+                    </svg>
                     Take photo
                 </button>
-                <button id="upload-button" class="w-full py-3 text-white font-semibold rounded-lg gradient-border-btn shadow-md hover:bg-opacity-10 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M19 12h-4v-4h-2v4h-4v2h4v4h2v-4h4v-2zM5 19h14V5H5v14zM19 3c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14z"/></svg>
+                <button id="upload-button"
+                    class="w-full py-3 text-white font-semibold rounded-lg gradient-border-btn shadow-md hover:bg-opacity-10 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path
+                            d="M19 12h-4v-4h-2v4h-4v2h4v4h2v-4h4v-2zM5 19h14V5H5v14zM19 3c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14z" />
+                    </svg>
                     Upload from Gallery
                 </button>
                 <input type="file" id="file-input" class="hidden" accept="image/*">
@@ -73,27 +98,39 @@
         <!-- Optional Text Prompt -->
         <div class="space-y-2">
             <h2 class="text-sm font-semibold text-gray-200">Describe the Experiment (optional but recommended!)</h2>
-            <textarea id="prompt-input" rows="3" class="w-full p-2 rounded-lg bg-transparent border border-gray-600 focus:ring-2 focus:ring-purple-600 focus:border-purple-600 resize-none text-gray-300 placeholder-gray-500" placeholder="E.g. Determining Diode Characteristics and Transistor Biasing..."></textarea>
+            <textarea id="prompt-input" rows="3"
+                class="w-full p-2 rounded-lg bg-transparent border border-gray-600 focus:ring-2 focus:ring-purple-600 focus:border-purple-600 resize-none text-gray-300 placeholder-gray-500"
+                placeholder="E.g. Determining Diode Characteristics and Transistor Biasing..."></textarea>
         </div>
 
         <!-- Pro Tip Card -->
         <div class="card p-3 flex items-start space-x-2">
             <span class="text-purple-400">💡</span>
             <p class="text-sm text-gray-400">
-                <span class="font-bold text-gray-200">Pro tip:</span> Clear photos and context ensure more accurate results. Unclear images or vague experiment may affect feedback.
+                <span class="font-bold text-gray-200">Pro tip:</span> Clear photos and context ensure more accurate
+                results. Unclear images or vague experiment may affect feedback.
             </p>
         </div>
 
         <!-- Analyze Button -->
-        <button id="analyze-button" class="w-full py-3 text-white text-lg font-bold rounded-lg gradient-button shadow-md hover:opacity-90 transition-opacity duration-200" disabled>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 3.75-1.07l.27.28v.79l5 4.99L20.49 19l-4.99-5zM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <button id="analyze-button"
+            class="w-full py-3 text-white text-lg font-bold rounded-lg gradient-button shadow-md hover:opacity-90 transition-opacity duration-200"
+            disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block mr-2" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 3.75-1.07l.27.28v.79l5 4.99L20.49 19l-4.99-5zM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+            </svg>
             Analyze
         </button>
-        
+
         <!-- Contact Us -->
         <div class="flex justify-center items-center pt-2">
-            <a href="#" class="flex items-center text-sm text-gray-400 hover:text-purple-400 transition-colors duration-200">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+            <a href="#"
+                class="flex items-center text-sm text-gray-400 hover:text-purple-400 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
+                </svg>
                 Contact us
             </a>
         </div>
@@ -106,10 +143,14 @@
     <!-- Analysis Results Card (Initially hidden) -->
     <div id="results-card" class="card w-full max-w-sm mx-auto p-6 md:p-8 space-y-6 mt-6 hidden">
         <div class="flex items-center space-x-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h-2v6z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h-2v6z" />
+            </svg>
             <h2 class="text-2xl font-bold text-white">Analysis Results</h2>
         </div>
-        
+
         <!-- Image Preview for Results -->
         <div class="card p-2 flex justify-center items-center">
             <img id="results-image-preview" src="" alt="Analysis Image" class="w-full rounded-md max-w-xs">
@@ -118,26 +159,38 @@
         <!-- Detected Issues Card (New from A3.png) -->
         <div id="detected-issues-card" class="card p-4 space-y-2 hidden">
             <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-2h-2v2zm0-4h2V7h-2v6z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <path
+                        d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-2h-2v2zm0-4h2V7h-2v6z" />
+                </svg>
                 <h3 class="font-bold text-red-400">Detected Issues (<span id="detected-issues-count">0</span>)</h3>
             </div>
             <ul id="detected-issues-list" class="list-none text-red-300 space-y-2"></ul>
         </div>
-        
+
         <!-- Equipment Info Card (Updated from Newting9.png) -->
         <div class="card p-4 space-y-2">
             <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"><path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"
+                    style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    <path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z" />
+                </svg>
                 <h3 class="font-bold text-white">Equipment Information</h3>
             </div>
-            <p><span class="font-semibold text-gray-400">Name:</span> <span id="equipment-name" class="text-gray-300"></span></p>
-            <p><span class="font-semibold text-gray-400">Summary:</span> <span id="equipment-summary" class="text-gray-300"></span></p>
+            <p><span class="font-semibold text-gray-400">Name:</span> <span id="equipment-name"
+                    class="text-gray-300"></span></p>
+            <p><span class="font-semibold text-gray-400">Summary:</span> <span id="equipment-summary"
+                    class="text-gray-300"></span></p>
         </div>
 
         <!-- Safety Warnings and Precautions (New from A3.png) -->
         <div id="safety-card" class="card p-4 space-y-2 hidden">
             <div class="flex items-center space-x-2">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"><path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"
+                    style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    <path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z" />
+                </svg>
                 <h3 class="font-bold text-white">Safety Warnings and Precautions</h3>
             </div>
             <ul id="safety-warnings-list" class="list-none text-gray-300 space-y-2"></ul>
@@ -146,33 +199,43 @@
         <!-- How to Use Card (Updated from Newting9.png) -->
         <div class="card p-4 space-y-2">
             <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"><path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"
+                    style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    <path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z" />
+                </svg>
                 <h3 class="font-bold text-white">How to Properly Use</h3>
             </div>
             <ul id="how-to-use-list" class="list-decimal list-inside text-gray-300 space-y-1"></ul>
         </div>
-        
+
         <!-- Associated Equipment Card (Updated from Newting10.png) -->
         <div class="card p-4 space-y-2">
             <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"><path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"
+                    style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    <path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z" />
+                </svg>
                 <h3 class="font-bold text-white">Commonly Associated Equipment</h3>
             </div>
             <div id="associated-equipment-list" class="grid grid-cols-2 gap-4 mt-2"></div>
         </div>
-        
+
         <!-- Coming Features -->
         <div class="space-y-4 pt-4 border-t border-gray-700">
             <h2 class="text-xl font-bold text-white">Coming Features</h2>
             <div class="grid grid-cols-1 gap-4">
-                <button id="summarize-button" class="w-full py-3 text-white font-bold rounded-lg gradient-button shadow-md hover:opacity-90 transition-colors duration-200" disabled>
+                <button id="summarize-button"
+                    class="w-full py-3 text-white font-bold rounded-lg gradient-button shadow-md hover:opacity-90 transition-colors duration-200"
+                    disabled>
                     <span class="gradient-text font-bold">✨</span> Summarize Analysis
                 </button>
-                <button id="quiz-button" class="w-full py-3 text-white font-bold rounded-lg gradient-button shadow-md hover:opacity-90 transition-colors duration-200" disabled>
+                <button id="quiz-button"
+                    class="w-full py-3 text-white font-bold rounded-lg gradient-button shadow-md hover:opacity-90 transition-colors duration-200"
+                    disabled>
                     <span class="gradient-text font-bold">✨</span> Generate Study Quiz
                 </button>
             </div>
-            
+
             <div id="additional-results" class="hidden space-y-4">
                 <!-- Summary Result -->
                 <div id="summary-card" class="card p-4 hidden">
@@ -188,32 +251,31 @@
             </div>
         </div>
     </div>
-
     <script>
-        // API Key is intentionally left blank. The runtime environment will inject the key.
         const API_KEY = "AIzaSyD4CON7omCIemrsI-TzAujg1QUkvmDcLZ0";
-        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=" + API_KEY;
+        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY;
 
-        const fileInput = document.getElementById('file-input');
-        const uploadButton = document.getElementById('upload-button');
         const cameraButton = document.getElementById('camera-button');
+        const uploadButton = document.getElementById('upload-button');
+        const fileInput = document.getElementById('file-input');
         const previewImage = document.getElementById('preview-image');
         const imagePreviewContainer = document.getElementById('image-preview-container');
         const analyzeButton = document.getElementById('analyze-button');
-        const promptInput = document.getElementById('prompt-input');
-        const messageBox = document.getElementById('message-box');
-        const mainCard = document.getElementById('main-card');
         const resultsCard = document.getElementById('results-card');
+        const messageBox = document.getElementById('message-box');
         const resultsImagePreview = document.getElementById('results-image-preview');
-
-        // New from A3.png
         const detectedIssuesCard = document.getElementById('detected-issues-card');
         const detectedIssuesCount = document.getElementById('detected-issues-count');
         const detectedIssuesList = document.getElementById('detected-issues-list');
+        const equipmentName = document.getElementById('equipment-name');
+        const equipmentSummary = document.getElementById('equipment-summary');
         const safetyCard = document.getElementById('safety-card');
         const safetyWarningsList = document.getElementById('safety-warnings-list');
+        const howToUseList = document.getElementById('how-to-use-list');
+        const associatedEquipmentList = document.getElementById('associated-equipment-list');
+        const promptInput = document.getElementById('prompt-input');
 
-        // New Gemini Features DOM elements
+        // New Gemini Features
         const summarizeButton = document.getElementById('summarize-button');
         const quizButton = document.getElementById('quiz-button');
         const additionalResults = document.getElementById('additional-results');
@@ -222,453 +284,314 @@
         const quizCard = document.getElementById('quiz-card');
         const quizQuestions = document.getElementById('quiz-questions');
 
-        // Existing
-        const equipmentName = document.getElementById('equipment-name');
-        const equipmentSummary = document.getElementById('equipment-summary');
-        const howToUseList = document.getElementById('how-to-use-list');
-        const associatedEquipmentList = document.getElementById('associated-equipment-list');
-
-        let base64Image = null;
+        let uploadedImageBase64 = '';
         let lastAnalysisData = null;
 
-        uploadButton.addEventListener('click', () => {
-            fileInput.click();
-        });
-        
-        cameraButton.addEventListener('click', () => {
-            fileInput.click(); // For simplicity, both buttons trigger the file input
-        });
+        function showMessage(message, type = 'info') {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-red-500', 'bg-blue-500', 'bg-green-500');
+            if (type === 'error') {
+                messageBox.classList.add('bg-red-500', 'text-white');
+            } else if (type === 'success') {
+                messageBox.classList.add('bg-green-500', 'text-white');
+            } else {
+                messageBox.classList.add('bg-blue-500', 'text-white');
+            }
+        }
+
+        cameraButton.addEventListener('click', () => fileInput.click());
+        uploadButton.addEventListener('click', () => fileInput.click());
 
         fileInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onloadend = () => {
-                    base64Image = reader.result.split(',')[1];
-                    previewImage.src = reader.result;
-                    resultsImagePreview.src = reader.result;
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    resultsImagePreview.src = e.target.result;
                     imagePreviewContainer.classList.remove('hidden');
+                    resultsCard.classList.add('hidden');
                     analyzeButton.disabled = false;
-                    showMessage('Image selected. Ready to analyze.', 'bg-green-900 text-green-300');
+                    uploadedImageBase64 = e.target.result.split(',')[1];
                 };
                 reader.readAsDataURL(file);
             }
         });
 
         analyzeButton.addEventListener('click', async () => {
-            if (!base64Image) {
-                showMessage('Please select an image first.', 'bg-red-900 text-red-300');
+            if (!uploadedImageBase64) {
+                showMessage('Please upload an image first.', 'error');
                 return;
             }
 
-            showMessage('Analyzing... please wait.', 'bg-blue-900 text-blue-300');
             analyzeButton.disabled = true;
+            showMessage('Analyzing image...', 'info');
             resultsCard.classList.add('hidden');
-            additionalResults.classList.add('hidden');
             summarizeButton.disabled = true;
             quizButton.disabled = true;
 
-            const userPromptText = promptInput.value.trim();
-            const textContent = `Analyze the equipment in this image. Based on this, provide extensive details for each field in a JSON schema. **Strictly adhere to the schema and fill every field.** If a field is unknown, use an empty string or empty array. Never add extra keys or explanatory text outside of the JSON block. The JSON schema should be:
-            {
-              "errors_detected": {
-                "count": "<integer>",
-                "list": ["<string>"]
-              },
-              "equipment_info": {
-                "name": "<string>",
-                "summary": "<string>",
-                "use_cases": ["<string>"],
-                "safety_precautions": ["<string>"]
-              },
-              "how_to_use": ["<string>"],
-              "associated_equipment": [
-                {
-                  "name": "<string>",
-                  "search_url": "<string>"
-                }
-              ]
-            }.
-            Additional description from the user: "${userPromptText}".`;
+            const userPrompt = promptInput.value.trim();
+            const fullPrompt = `You are a lab equipment analyzer. Provide results strictly in this JSON schema:
+        {
+            "equipment_info": {
+                "name": "string",
+                "summary": "string",
+                "use_cases": ["string"]
+            },
+            "detected_issues": ["string"],
+            "safety_warnings": ["string"],
+            "how_to_use": ["string"],
+            "associated_equipment": [
+                {"name": "string", "search_url": "string"}
+            ]
+        }
+        Additional user input: "${userPrompt}".`;
 
             const payload = {
                 contents: [
                     {
                         parts: [
-                            { text: textContent },
+                            { text: fullPrompt },
                             {
                                 inlineData: {
-                                    mimeType: "image/jpeg",
-                                    data: base64Image
+                                    mimeType: "image/png",
+                                    data: uploadedImageBase64
                                 }
                             }
-                        ]
-                    }
-                ],
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            "errors_detected": {
-                                "type": "OBJECT",
-                                "properties": {
-                                    "count": { "type": "NUMBER" },
-                                    "list": { "type": "ARRAY", "items": { "type": "STRING" } }
-                                }
-                            },
-                            "equipment_info": {
-                                "type": "OBJECT",
-                                "properties": {
-                                    "name": { "type": "STRING" },
-                                    "summary": { "type": "STRING" },
-                                    "use_cases": { "type": "ARRAY", "items": { "type": "STRING" } },
-                                    "safety_precautions": { "type": "ARRAY", "items": { "type": "STRING" } }
-                                }
-                            },
-                            "how_to_use": { "type": "ARRAY", "items": { "type": "STRING" } },
-                            "associated_equipment": {
-                                "type": "ARRAY",
-                                "items": {
-                                    "type": "OBJECT",
-                                    "properties": {
-                                        "name": { "type": "STRING" },
-                                        "search_url": { "type": "STRING" }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            
-            const fetchPromise = fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            const timeoutPromise = new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    reject(new Error('Request timed out. Please try again.'));
-                }, 20000); // 20-second timeout
-            });
-
-            try {
-                const response = await Promise.race([fetchPromise, timeoutPromise]);
-
-                if (!response.ok) {
-                    throw new Error(`API request failed with status: ${response.status}`);
-                }
-
-                const result = await response.json();
-                const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-                
-                if (!jsonText || typeof jsonText !== 'string') {
-                    throw new Error('API did not return a valid JSON string.');
-                }
-                
-                let data = {};
-                try {
-                    data = JSON.parse(jsonText);
-                } catch (e) {
-                    console.error("JSON parsing failed. Raw response:", jsonText);
-                    throw new Error('API returned malformed data. Please try again with a different image.');
-                }
-                
-                if (!data || !data.equipment_info || !data.equipment_info.name) {
-                    throw new Error('Invalid or incomplete data received from API. Please try a different image.');
-                }
-
-                lastAnalysisData = data;
-                renderResults(data);
-                summarizeButton.disabled = false;
-                quizButton.disabled = false;
-
-            } catch (error) {
-                console.error('Error:', error);
-                showMessage(`An error occurred: ${error.message}`, 'bg-red-900 text-red-300');
-            } finally {
-                analyzeButton.disabled = false;
-            }
-        });
-
-        // New Feature: Summarize Analysis
-        summarizeButton.addEventListener('click', async () => {
-            if (!lastAnalysisData) {
-                showMessage('Please perform an analysis first.', 'bg-red-900 text-red-300');
-                return;
-            }
-
-            showMessage('Summarizing...', 'bg-blue-900 text-blue-300');
-            summarizeButton.disabled = true;
-            summaryCard.classList.add('hidden');
-
-            const textToSummarize = JSON.stringify(lastAnalysisData, null, 2);
-            const prompt = `Please provide a concise, single-paragraph summary of the following lab equipment analysis data:\n\n${textToSummarize}`;
-
-            const payload = {
-                contents: [
-                    {
-                        parts: [
-                            { text: prompt }
                         ]
                     }
                 ]
             };
 
-            const fetchPromise = fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            const timeoutPromise = new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    reject(new Error('Request timed out. Please try again.'));
-                }, 20000); // 20-second timeout
-            });
-
             try {
-                const response = await Promise.race([fetchPromise, timeoutPromise]);
-                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
                 if (!response.ok) {
-                    throw new Error(`API request failed with status: ${response.status}`);
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                
+
                 const result = await response.json();
-                const summary = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-                
-                if (summary) {
-                    summaryText.textContent = summary;
-                    summaryCard.classList.remove('hidden');
-                    additionalResults.classList.remove('hidden');
-                    showMessage('Summary generated!', 'bg-green-900 text-green-300');
+                let text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    const cleanedText = text.replace(/```json|```/g, '').trim();
+                    const data = JSON.parse(cleanedText);
+
+                    lastAnalysisData = data;
+                    displayResults(data);
+                    showMessage('Analysis complete!', 'success');
+                    summarizeButton.disabled = false;
+                    quizButton.disabled = false;
                 } else {
-                    throw new Error('API did not return a summary.');
+                    throw new Error('No text content received from API.');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showMessage(`An error occurred while summarizing: ${error.message}`, 'bg-red-900 text-red-300');
+                console.error("Analysis failed:", error);
+                showMessage("Failed to get analysis. Please try again.", 'error');
             } finally {
-                summarizeButton.disabled = false;
+                analyzeButton.disabled = false;
             }
         });
 
-        // New Feature: Generate a Study Quiz
-        quizButton.addEventListener('click', async () => {
-            if (!lastAnalysisData) {
-                showMessage('Please perform an analysis first.', 'bg-red-900 text-red-300');
-                return;
-            }
-
-            showMessage('Generating quiz...', 'bg-blue-900 text-blue-300');
-            quizButton.disabled = true;
-            quizCard.classList.add('hidden');
-
-            const textForQuiz = JSON.stringify(lastAnalysisData, null, 2);
-            const prompt = `From the following lab equipment analysis data, create a 3-question multiple-choice quiz. Provide questions about the equipment name, summary, or use cases. Ensure each question has exactly 4 options, with only one correct answer. Return the result as a JSON array matching the schema. Do not include any text outside of the JSON array. The data is:\n\n${textForQuiz}`;
-
-            const payload = {
-                contents: [
-                    {
-                        parts: [
-                            { text: prompt }
-                        ]
-                    }
-                ],
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "ARRAY",
-                        items: {
-                            type: "OBJECT",
-                            properties: {
-                                "question": { "type": "STRING" },
-                                "options": { "type": "ARRAY", "items": { "type": "STRING" } },
-                                "correct_answer": { "type": "STRING" }
-                            }
-                        }
-                    }
-                }
-            };
-            
-            const fetchPromise = fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            const timeoutPromise = new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    reject(new Error('Request timed out. Please try again.'));
-                }, 20000); // 20-second timeout
-            });
-            
-            try {
-                const response = await Promise.race([fetchPromise, timeoutPromise]);
-                
-                if (!response.ok) {
-                    throw new Error(`API request failed with status: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                if (!jsonText || typeof jsonText !== 'string') {
-                    throw new Error('API did not return a valid quiz JSON string.');
-                }
-                
-                const quizData = JSON.parse(jsonText);
-                
-                renderQuiz(quizData);
-                quizCard.classList.remove('hidden');
-                additionalResults.classList.remove('hidden');
-                showMessage('Quiz generated!', 'bg-green-900 text-green-300');
-
-            } catch (error) {
-                console.error('Error:', error);
-                showMessage(`An error occurred while generating the quiz: ${error.message}`, 'bg-red-900 text-red-300');
-            } finally {
-                quizButton.disabled = false;
-            }
-        });
-
-        function showMessage(text, className) {
-            messageBox.textContent = text;
-            messageBox.className = `${className} p-4 rounded-lg text-sm transition-all duration-300 block`;
-        }
-
-        function renderResults(data) {
-            // Add a guard clause to ensure the main data structure exists
-            if (!data || !data.equipment_info) {
-                console.error('API response is missing required data.');
-                showMessage('Analysis data is incomplete. Please try again.', 'bg-red-900 text-red-300');
-                resultsCard.classList.add('hidden');
-                return;
-            }
-
+        function displayResults(data) {
             resultsCard.classList.remove('hidden');
-            showMessage('Analysis complete!', 'bg-green-900 text-green-300');
-            
-            // Render detected issues
-            const issues = data.errors_detected || {};
-            if (issues && issues.count > 0 && issues.list && issues.list.length > 0) {
+
+            // Equipment Info
+            equipmentName.textContent = data?.equipment_info?.name || "Unidentified Equipment";
+            equipmentSummary.textContent = data?.equipment_info?.summary || "No summary available.";
+
+            // Inject Use Cases card dynamically if missing
+            let useCasesCard = document.getElementById('use-cases-card');
+            if (!useCasesCard) {
+                useCasesCard = document.createElement('div');
+                useCasesCard.id = 'use-cases-card';
+                useCasesCard.className = "card p-4 space-y-2";
+                useCasesCard.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"
+                        style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        <path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z" />
+                    </svg>
+                    <h3 class="font-bold text-white">Use Cases</h3>
+                </div>
+                <ul id="use-cases-list" class="list-disc list-inside text-gray-300 space-y-1"></ul>
+            `;
+                resultsCard.appendChild(useCasesCard);
+            }
+            const useCasesList = document.getElementById('use-cases-list');
+            useCasesList.innerHTML = '';
+            (data?.equipment_info?.use_cases || []).forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                useCasesList.appendChild(li);
+            });
+
+            // Detected Issues
+            const issues = data?.detected_issues || [];
+            if (issues.length > 0) {
                 detectedIssuesCard.classList.remove('hidden');
-                detectedIssuesCount.textContent = issues.count;
+                detectedIssuesCount.textContent = issues.length;
                 detectedIssuesList.innerHTML = '';
-                (issues.list || []).forEach(issue => {
+                issues.forEach(issue => {
                     const li = document.createElement('li');
-                    li.className = "flex items-start space-x-2";
-                    li.innerHTML = `
-                        <svg xmlns="http://www.w3.0/2000/svg" class="h-5 w-5 text-red-400 mt-1" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-2h-2v2zm0-4h2V7h-2v6z"/></svg>
-                        <div>
-                            <p class="font-bold text-gray-200">Issue Detected</p>
-                            <p class="text-xs text-gray-400">${issue}</p>
-                        </div>
-                    `;
+                    li.textContent = `• ${issue}`;
                     detectedIssuesList.appendChild(li);
                 });
             } else {
                 detectedIssuesCard.classList.add('hidden');
             }
-            
-            // Render safety warnings
-            const precautions = data.equipment_info.safety_precautions || [];
-            if (precautions.length > 0) {
+
+            // Safety Warnings
+            const safetyWarnings = data?.safety_warnings || [];
+            if (safetyWarnings.length > 0) {
                 safetyCard.classList.remove('hidden');
                 safetyWarningsList.innerHTML = '';
-                precautions.forEach(warning => {
+                safetyWarnings.forEach(warning => {
                     const li = document.createElement('li');
-                    li.className = "flex items-start space-x-2";
-                    li.innerHTML = `
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-400 mt-1" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
-                        <div>
-                            <p class="font-bold text-gray-200">Safety Precaution</p>
-                            <p class="text-xs text-gray-400">${warning}</p>
-                        </div>
-                    `;
+                    li.textContent = `• ${warning}`;
                     safetyWarningsList.appendChild(li);
                 });
             } else {
                 safetyCard.classList.add('hidden');
             }
 
-            // Equipment Info Card
-            const equipment = data.equipment_info || {};
-            equipmentName.textContent = equipment.name || 'N/A';
-            equipmentSummary.textContent = equipment.summary || 'N/A';
-            
-            // How To Use Card
+            // How to Use
             howToUseList.innerHTML = '';
-            (data.how_to_use || []).forEach(item => {
+            (data?.how_to_use || []).forEach(step => {
                 const li = document.createElement('li');
-                li.textContent = item;
+                li.textContent = step;
                 howToUseList.appendChild(li);
             });
 
-            // Associated Equipment Card
+            // Associated Equipment
             associatedEquipmentList.innerHTML = '';
-            (data.associated_equipment || []).forEach(item => {
+            (data?.associated_equipment || []).forEach(item => {
                 const div = document.createElement('div');
                 div.className = "flex flex-col items-center space-y-2";
-                
                 const img = document.createElement('img');
-                img.src = `https://placehold.co/100x100/1f2937/9ca3af?text=Gear`;
+                img.src = `https://placehold.co/100x100?text=${encodeURIComponent(item.name.split(' ')[0])}`;
                 img.className = "rounded-md";
                 div.appendChild(img);
-
                 const link = document.createElement('a');
                 link.href = item.search_url || '#';
-                link.textContent = item.name || 'N/A';
+                link.textContent = item.name;
                 link.target = "_blank";
-                link.className = "text-sm text-blue-400 hover:underline font-medium";
+                link.className = "text-sm text-gray-400 hover:text-purple-400 font-medium text-center";
                 div.appendChild(link);
-
                 associatedEquipmentList.appendChild(div);
             });
         }
-        
-        function renderQuiz(quizData) {
-            quizQuestions.innerHTML = '';
-            if (!Array.isArray(quizData) || quizData.length === 0) {
-                showMessage('Failed to generate quiz questions. Please try again.', 'bg-red-900 text-red-300');
-                quizCard.classList.add('hidden');
+
+        // --- Summarize Feature ---
+        summarizeButton.addEventListener('click', async () => {
+            if (!lastAnalysisData) {
+                showMessage('Please perform an analysis first.', 'error');
                 return;
             }
+            showMessage('Summarizing...', 'info');
+            summarizeButton.disabled = true;
+            summaryCard.classList.add('hidden');
+
+            const prompt = `Summarize the following lab equipment analysis into a single paragraph:\n\n${JSON.stringify(lastAnalysisData, null, 2)}`;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                const result = await response.json();
+                const summary = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (summary) {
+                    summaryText.textContent = summary;
+                    summaryCard.classList.remove('hidden');
+                    additionalResults.classList.remove('hidden');
+                    showMessage('Summary generated!', 'success');
+                } else throw new Error("No summary returned.");
+            } catch (err) {
+                console.error("Summarize error:", err);
+                showMessage("Failed to generate summary.", 'error');
+            } finally {
+                summarizeButton.disabled = false;
+            }
+        });
+
+        // --- Quiz Feature ---
+        quizButton.addEventListener('click', async () => {
+            if (!lastAnalysisData) {
+                showMessage('Please perform an analysis first.', 'error');
+                return;
+            }
+            showMessage('Generating quiz...', 'info');
+            quizButton.disabled = true;
+            quizCard.classList.add('hidden');
+
+            const prompt = `From this analysis, create 3 multiple-choice questions with 4 options each and one correct answer. Return ONLY JSON in the format:
+        [
+          {"question": "string", "options": ["A","B","C","D"], "correct_answer": "string"}
+        ]
+        Data: ${JSON.stringify(lastAnalysisData, null, 2)}`;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                const result = await response.json();
+                let text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                const cleanedText = text.replace(/```json|```/g, '').trim();
+                const quizData = JSON.parse(cleanedText);
+
+                renderQuiz(quizData);
+                quizCard.classList.remove('hidden');
+                additionalResults.classList.remove('hidden');
+                showMessage('Quiz generated!', 'success');
+            } catch (err) {
+                console.error("Quiz error:", err);
+                showMessage("Failed to generate quiz.", 'error');
+            } finally {
+                quizButton.disabled = false;
+            }
+        });
+
+        function renderQuiz(quizData) {
+            quizQuestions.innerHTML = '';
             quizData.forEach((quizItem, index) => {
                 const questionDiv = document.createElement('div');
                 questionDiv.className = "space-y-2";
-                
                 const questionText = document.createElement('p');
                 questionText.className = "font-semibold text-gray-200";
                 questionText.textContent = `${index + 1}. ${quizItem.question}`;
                 questionDiv.appendChild(questionText);
-                
+
                 const optionsList = document.createElement('ul');
                 optionsList.className = "space-y-1";
-                
+
                 quizItem.options.forEach(option => {
                     const li = document.createElement('li');
-                    li.className = "p-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-300 cursor-pointer hover:bg-gray-700 transition-colors duration-200";
+                    li.className = "p-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-300 cursor-pointer hover:bg-gray-700";
                     li.textContent = option;
                     li.addEventListener('click', () => {
-                        const allOptions = optionsList.querySelectorAll('li');
-                        allOptions.forEach(opt => opt.style.pointerEvents = 'none');
+                        optionsList.querySelectorAll('li').forEach(opt => opt.style.pointerEvents = 'none');
                         if (option === quizItem.correct_answer) {
-                            li.style.backgroundColor = 'rgba(16, 185, 129, 0.5)'; // Green
+                            li.style.backgroundColor = 'rgba(16, 185, 129, 0.5)'; // green
                         } else {
-                            li.style.backgroundColor = 'rgba(239, 68, 68, 0.5)'; // Red
+                            li.style.backgroundColor = 'rgba(239, 68, 68, 0.5)'; // red
                         }
                     });
                     optionsList.appendChild(li);
                 });
-                
+
                 questionDiv.appendChild(optionsList);
                 quizQuestions.appendChild(questionDiv);
             });
         }
     </script>
 </body>
-</html>
 
+</html>
