@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZikLabs - Lab Equipment Analysis</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -12,6 +14,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #0f111a;
             color: #E2E8F0;
+            -webkit-font-smoothing: antialiased;
         }
         .zik-card {
             background-color: #1a1c2e;
@@ -59,6 +62,11 @@
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* 针对 Vercel 移动端浏览器的触摸优化 */
+        .active-scale:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 flex flex-col items-center">
@@ -69,13 +77,13 @@
             <h1 class="text-2xl font-bold flex items-center gap-2">
                 <i class="fas fa-flask text-indigo-500"></i> ZikLabs
             </h1>
-            <div class="text-xs text-gray-400 font-mono">2026-02-02 13:36</div>
+            <div class="text-xs text-gray-400 font-mono">2026-02-02 13:52</div>
         </div>
 
-        <div class="zik-card p-6 space-y-4">
-            <div class="border-2 border-dashed border-gray-600 rounded-xl p-8 flex flex-col items-center justify-center space-y-4 hover:border-indigo-500 transition-colors cursor-pointer" onclick="document.getElementById('file-input').click()">
+        <div class="zik-card p-6 space-y-4 shadow-2xl">
+            <div class="border-2 border-dashed border-gray-600 rounded-xl p-8 flex flex-col items-center justify-center space-y-4 hover:border-indigo-500 transition-colors cursor-pointer group" onclick="document.getElementById('file-input').click()">
                 <div id="upload-placeholder" class="text-center">
-                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-500 mb-2"></i>
+                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-500 mb-2 group-hover:text-indigo-400 transition-colors"></i>
                     <p class="text-sm font-semibold">Upload Equipment Image</p>
                     <p class="text-xs text-gray-500 mt-1">Tap to capture or select</p>
                 </div>
@@ -83,9 +91,9 @@
                 <input type="file" id="file-input" class="hidden" accept="image/*">
             </div>
 
-            <textarea id="context-input" class="w-full bg-[#111322] border border-gray-700 rounded-lg p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Add experiment context (optional)..." rows="2"></textarea>
+            <textarea id="context-input" class="w-full bg-[#111322] border border-gray-700 rounded-lg p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all" placeholder="Add experiment context (optional)..." rows="2"></textarea>
 
-            <button id="analyze-btn" class="w-full py-4 gradient-bg rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-95" disabled>
+            <button id="analyze-btn" class="w-full py-4 gradient-bg rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all active-scale" disabled>
                 Analyze Equipment
             </button>
         </div>
@@ -94,15 +102,15 @@
     </div>
 
     <!-- 结果展示 -->
-    <div id="results-view" class="hidden w-full max-w-lg space-y-6">
-        <header class="flex items-center gap-4 bg-indigo-600 p-4 -mx-4 md:mx-0 md:rounded-t-xl">
-            <button onclick="window.location.reload()" class="text-white hover:text-gray-200">
+    <div id="results-view" class="hidden w-full max-w-lg space-y-6 mb-12">
+        <header class="flex items-center gap-4 bg-indigo-600 p-4 -mx-4 md:mx-0 md:rounded-t-xl sticky top-0 z-10 shadow-lg">
+            <button onclick="window.location.reload()" class="text-white hover:text-gray-200 p-2">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <h2 id="result-title" class="text-xl font-bold text-white">Equipment Analysis</h2>
+            <h2 id="result-title" class="text-xl font-bold text-white truncate">Equipment Analysis</h2>
         </header>
 
-        <div class="zik-card overflow-hidden">
+        <div class="zik-card overflow-hidden shadow-xl">
             <img id="result-img" class="w-full h-56 object-cover" src="" alt="Analyzed Equipment">
         </div>
 
@@ -127,7 +135,7 @@
         </div>
 
         <!-- Guide Section -->
-        <div class="guide-card p-5 space-y-4">
+        <div class="guide-card p-5 space-y-4 rounded-xl shadow-inner">
             <h3 class="flex items-center gap-2 text-white font-bold">
                 <i class="fas fa-book-open text-gray-400"></i> How to Properly Use
             </h3>
@@ -137,7 +145,7 @@
         </div>
 
         <!-- Associated Equipment Grid -->
-        <div class="guide-card p-5 space-y-4">
+        <div class="guide-card p-5 space-y-4 rounded-xl shadow-inner">
             <h3 class="flex items-center gap-2 text-white font-bold">
                 <i class="fas fa-project-diagram text-gray-400"></i> Commonly Associated Equipment
             </h3>
@@ -148,6 +156,7 @@
     </div>
 
     <script>
+        // 确保 Vercel 部署时使用的是空字符串 API Key
         const apiKey = ""; 
         const fileInput = document.getElementById('file-input');
         const analyzeBtn = document.getElementById('analyze-btn');
@@ -169,7 +178,7 @@
             }
         });
 
-        // 增强的图片生成函数，包含重试和错误处理
+        // 针对 Vercel 环境优化的图片生成函数
         async function generateEquipmentImage(equipmentName) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
             const prompt = `A clean, professional studio photograph of ${equipmentName} used in a laboratory setting, isolated on a neutral dark background, high detail.`;
@@ -182,20 +191,25 @@
                 try {
                     const res = await fetch(url, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json'
+                        },
                         body: JSON.stringify(payload)
                     });
                     
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    if (!res.ok) {
+                        const errData = await res.json().catch(() => ({}));
+                        throw new Error(`HTTP ${res.status}: ${errData.error?.message || 'Unknown'}`);
+                    }
                     
                     const result = await res.json();
                     if (result.predictions && result.predictions[0] && result.predictions[0].bytesBase64Encoded) {
                         return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
                     }
                 } catch (error) {
-                    console.warn(`Attempt ${i+1} failed for ${equipmentName}:`, error);
+                    console.error(`Vercel Log - Attempt ${i+1} for ${equipmentName}:`, error);
                     if (i === 2) return null;
-                    await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+                    await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i))); // 指数退避
                 }
             }
             return null;
@@ -220,7 +234,7 @@
                 const result = await callGemini(context, currentBase64, systemPrompt);
                 renderResults(result);
             } catch (error) {
-                statusMsg.textContent = "Error: " + error.message;
+                statusMsg.textContent = "Analysis Error: " + error.message;
                 analyzeBtn.disabled = false;
             }
         }
@@ -235,9 +249,14 @@
 
             for (let i = 0; i < 5; i++) {
                 try {
-                    const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) });
+                    const res = await fetch(url, { 
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload) 
+                    });
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     const data = await res.json();
+                    if (!data.candidates?.[0]?.content?.parts?.[0]?.text) throw new Error("Empty response");
                     return JSON.parse(data.candidates[0].content.parts[0].text);
                 } catch (e) {
                     if (i === 4) throw e;
@@ -255,7 +274,7 @@
             // 渲染问题列表
             const issuesContainer = document.getElementById('issues-list');
             issuesContainer.innerHTML = data.issues.map(issue => `
-                <div class="issue-card p-4 rounded-xl flex gap-3 items-start">
+                <div class="issue-card p-4 rounded-xl flex gap-3 items-start shadow-md">
                     <i class="fas fa-circle-exclamation text-red-400 mt-1"></i>
                     <div class="flex-1">
                         <div class="flex justify-between items-center">
@@ -270,8 +289,8 @@
             // 渲染安全警告
             const safetyContainer = document.getElementById('safety-list');
             safetyContainer.innerHTML = data.safety.map(s => `
-                <div class="safety-card p-4 rounded-xl flex gap-3 items-start">
-                    <i class="fas fa-check text-indigo-400 mt-1"></i>
+                <div class="safety-card p-4 rounded-xl flex gap-3 items-start shadow-md">
+                    <i class="fas fa-shield-virus text-indigo-400 mt-1"></i>
                     <div class="flex-1">
                         <div class="flex justify-between items-center">
                             <span class="font-bold text-indigo-100 text-sm">${s.title}</span>
@@ -285,34 +304,35 @@
             // 渲染使用步骤
             document.getElementById('usage-list').innerHTML = data.usageSteps.map(step => `<li>${step}</li>`).join('');
 
-            // 渲染相关设备网格
+            // 渲染相关设备网格 (Vercel 优化加载)
             const grid = document.getElementById('associated-grid');
             grid.innerHTML = ''; 
             
             for (const item of data.associated) {
                 const card = document.createElement('div');
-                card.className = 'space-y-2';
+                card.className = 'space-y-2 group';
                 
                 const placeholder = document.createElement('div');
-                placeholder.className = 'gear-placeholder';
+                placeholder.className = 'gear-placeholder shadow-lg group-hover:ring-2 ring-indigo-500 transition-all';
                 placeholder.innerHTML = '<div class="loading-spinner"></div>';
                 
                 const link = document.createElement('a');
                 link.href = `https://www.google.com/search?q=${encodeURIComponent(item)}`;
                 link.target = "_blank";
-                link.className = "text-[10px] text-blue-400 font-semibold leading-tight hover:underline block";
+                link.rel = "noopener noreferrer"; // Vercel 安全性最佳实践
+                link.className = "text-[10px] text-blue-400 font-semibold leading-tight hover:underline block truncate";
                 link.textContent = item;
                 
                 card.appendChild(placeholder);
                 card.appendChild(link);
                 grid.appendChild(card);
                 
-                // 异步生成并更新图片
+                // 异步生成
                 generateEquipmentImage(item).then(imgUrl => {
                     if (imgUrl) {
-                        placeholder.innerHTML = `<img src="${imgUrl}" class="gear-image" alt="${item}">`;
+                        placeholder.innerHTML = `<img src="${imgUrl}" class="gear-image" alt="${item}" loading="lazy">`;
                     } else {
-                        placeholder.innerHTML = '<i class="fas fa-tools text-2xl"></i>';
+                        placeholder.innerHTML = '<i class="fas fa-microscope text-2xl opacity-50"></i>';
                     }
                 });
             }
