@@ -3,440 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZikLabs</title>
+    <title>ZikLabs - Lab Equipment Analysis</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #171725;
+            background-color: #0f111a;
             color: #E2E8F0;
         }
-        .card {
-            background-color: #212134;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-            border: 1px solid #33334e;
+        .zik-card {
+            background-color: #1a1c2e;
+            border-radius: 1.25rem;
+            border: 1px solid #2d2f45;
         }
-        .gradient-button {
-            background-image: linear-gradient(to right, #6D28D9, #4C1D95);
+        .gradient-bg {
+            background: linear-gradient(135deg, #6D28D9 0%, #4C1D95 100%);
         }
-        .gradient-border-btn {
-            background-color: transparent;
-            border: 1px solid #6D28D9;
+        .issue-card {
+            background-color: #3d2b2b;
+            border-left: 4px solid #f87171;
         }
-        .gradient-text {
-            background: -webkit-linear-gradient(right, #6D28D9, #4C1D95);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .safety-card {
+            background-color: #242a4a;
+            border-left: 4px solid #6366f1;
         }
-        .icon {
-            filter: invert(1);
+        .guide-card {
+            background-color: #1e213a;
+            border: 1px solid #33385c;
         }
+        .gear-placeholder {
+            background-color: #252945;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4b527d;
+            font-weight: 700;
+            font-size: 1.5rem;
+            border-radius: 0.75rem;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+        }
+        .gear-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #6366f1;
+            width: 32px;
+            height: 32px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-4">
+<body class="min-h-screen p-4 md:p-8 flex flex-col items-center">
 
-    <!-- Main Container Card -->
-    <div id="main-card" class="card w-full max-w-sm mx-auto p-6 md:p-8 space-y-6 transition-all duration-300 ease-in-out">
-
-        <!-- Header -->
-        <div class="flex items-center space-x-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-            <h1 class="text-2xl font-bold text-white">ZikLabs</h1>
+    <!-- 上传/初始状态 -->
+    <div id="main-view" class="w-full max-w-md space-y-6">
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-2xl font-bold flex items-center gap-2">
+                <i class="fas fa-flask text-indigo-500"></i> ZikLabs
+            </h1>
+            <div class="text-xs text-gray-400 font-mono">2026-02-02 13:36</div>
         </div>
 
-        <!-- Image Upload Section -->
-        <div class="card p-4 space-y-4">
-            <div class="flex items-center justify-center space-x-2 text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM1.5 12C1.5 6.201 6.201 1.5 12 1.5S22.5 6.201 22.5 12 17.799 22.5 12 22.5 1.5 17.799 1.5 12Z"/></svg>
-                <span class="font-bold text-white">Add Equipment Image</span>
-            </div>
-            <p class="text-xs text-center text-gray-400">Clear, well-lit photos ensure accurate analysis</p>
-
-            <div class="flex flex-col items-center space-y-2">
-                <button id="camera-button" class="w-full py-3 text-white font-semibold rounded-lg gradient-button shadow-md hover:opacity-90 transition-opacity duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h5l2-2h6l2 2h5v15c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm8 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/><circle cx="12" cy="14" r="3"/></svg>
-                    Take photo
-                </button>
-                <button id="upload-button" class="w-full py-3 text-white font-semibold rounded-lg gradient-border-btn shadow-md hover:bg-opacity-10 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M19 12h-4v-4h-2v4h-4v2h4v4h2v-4h4v-2zM5 19h14V5H5v14zM19 3c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14z"/></svg>
-                    Upload from Gallery
-                </button>
+        <div class="zik-card p-6 space-y-4">
+            <div class="border-2 border-dashed border-gray-600 rounded-xl p-8 flex flex-col items-center justify-center space-y-4 hover:border-indigo-500 transition-colors cursor-pointer" onclick="document.getElementById('file-input').click()">
+                <div id="upload-placeholder" class="text-center">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-500 mb-2"></i>
+                    <p class="text-sm font-semibold">Upload Equipment Image</p>
+                    <p class="text-xs text-gray-500 mt-1">Tap to capture or select</p>
+                </div>
+                <img id="image-preview" src="" class="hidden w-full rounded-lg object-cover max-h-48 shadow-lg">
                 <input type="file" id="file-input" class="hidden" accept="image/*">
             </div>
-            <div id="image-preview-container" class="hidden flex justify-center items-center">
-                <img id="preview-image" src="" alt="Image Preview" class="w-full rounded-md max-w-xs">
-            </div>
-        </div>
 
-        <!-- Optional Text Prompt -->
-        <div class="space-y-2">
-            <h2 class="text-sm font-semibold text-gray-200">Describe the Experiment (optional but recommended!)</h2>
-            <textarea id="prompt-input" rows="3" class="w-full p-2 rounded-lg bg-transparent border border-gray-600 focus:ring-2 focus:ring-purple-600 focus:border-purple-600 resize-none text-gray-300 placeholder-gray-500" placeholder="E.g. Determining Diode Characteristics and Transistor Biasing..."></textarea>
-        </div>
+            <textarea id="context-input" class="w-full bg-[#111322] border border-gray-700 rounded-lg p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Add experiment context (optional)..." rows="2"></textarea>
 
-        <!-- Pro Tip Card -->
-        <div class="card p-3 flex items-start space-x-2">
-            <span class="text-purple-400">💡</span>
-            <p class="text-sm text-gray-400">
-                <span class="font-bold text-gray-200">Pro tip:</span> Clear photos and context ensure more accurate results. Unclear images or vague experiment may affect feedback.
-            </p>
+            <button id="analyze-btn" class="w-full py-4 gradient-bg rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-95" disabled>
+                Analyze Equipment
+            </button>
         </div>
-
-        <!-- Analyze Button -->
-        <button id="analyze-button" class="w-full py-3 text-white text-lg font-bold rounded-lg gradient-button shadow-md hover:opacity-90 transition-opacity duration-200" disabled>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 3.75-1.07l.27.28v.79l5 4.99L20.49 19l-4.99-5zM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-            Analyze
-        </button>
         
-        <!-- Contact Us -->
-        <div class="flex justify-center items-center pt-2">
-            <a href="#" class="flex items-center text-sm text-gray-400 hover:text-purple-400 transition-colors duration-200">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
-                Contact us
-            </a>
-        </div>
-
-        <!-- Status Message Box -->
-        <div id="message-box" class="hidden p-4 rounded-lg text-sm transition-all duration-300 text-center"></div>
-
+        <div id="status-msg" class="hidden text-center text-sm p-3 rounded-lg bg-indigo-900/20 text-indigo-300 animate-pulse"></div>
     </div>
 
-    <!-- Analysis Results Card (Initially hidden) -->
-    <div id="results-card" class="card w-full max-w-sm mx-auto p-6 md:p-8 space-y-6 mt-6 hidden transition-all duration-300 ease-in-out">
-        <button id="back-button" class="flex items-center text-gray-400 hover:text-purple-400 transition-colors duration-200 mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-            Back
-        </button>
-        
-        <div class="flex items-center space-x-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h-2v6z"/></svg>
-            <h2 class="text-2xl font-bold text-white">Analysis Results</h2>
-        </div>
-        
-        <!-- Image Preview for Results -->
-        <div class="card p-2 flex justify-center items-center">
-            <img id="results-image-preview" src="" alt="Analysis Image" class="w-full rounded-md max-w-xs">
+    <!-- 结果展示 -->
+    <div id="results-view" class="hidden w-full max-w-lg space-y-6">
+        <header class="flex items-center gap-4 bg-indigo-600 p-4 -mx-4 md:mx-0 md:rounded-t-xl">
+            <button onclick="window.location.reload()" class="text-white hover:text-gray-200">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 id="result-title" class="text-xl font-bold text-white">Equipment Analysis</h2>
+        </header>
+
+        <div class="zik-card overflow-hidden">
+            <img id="result-img" class="w-full h-56 object-cover" src="" alt="Analyzed Equipment">
         </div>
 
-        <!-- Detected Issues Card (New from A3.png) -->
-        <div id="detected-issues-card" class="card p-4 space-y-2 hidden">
-            <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-2h-2v2zm0-4h2V7h-2v6z"/></svg>
-                <h3 class="font-bold text-red-400">Detected Issues (<span id="detected-issues-count">0</span>)</h3>
+        <!-- Detected Issues Section -->
+        <div class="space-y-3">
+            <h3 class="flex items-center gap-2 text-red-400 font-bold px-1">
+                <i class="fas fa-exclamation-triangle"></i> Detected Issues
+            </h3>
+            <div id="issues-list" class="space-y-2">
+                <!-- Dynamic Content -->
             </div>
-            <ul id="detected-issues-list" class="list-none text-red-300 space-y-2"></ul>
-        </div>
-        
-        <!-- Equipment Info Card (Updated from Newting9.png) -->
-        <div class="card p-4 space-y-2">
-            <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"><path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z"/></svg>
-                <h3 class="font-bold text-white">Equipment Information</h3>
-            </div>
-            <p><span class="font-semibold text-gray-400">Name:</span> <span id="equipment-name" class="text-gray-300"></span></p>
-            <p><span class="font-semibold text-gray-400">Summary:</span> <span id="equipment-summary" class="text-gray-300"></span></p>
         </div>
 
-        <!-- Safety Warnings and Precautions (New from A3.png) -->
-        <div id="safety-card" class="card p-4 space-y-2 hidden">
-            <div class="flex items-center space-x-2">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"><path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z"/></svg>
-                <h3 class="font-bold text-white">Safety Warnings and Precautions</h3>
+        <!-- Safety Section -->
+        <div class="space-y-3">
+            <h3 class="flex items-center gap-2 text-indigo-400 font-bold px-1">
+                <i class="fas fa-shield-alt"></i> Safety Warnings and Precautions
+            </h3>
+            <div id="safety-list" class="space-y-2">
+                <!-- Dynamic Content -->
             </div>
-            <ul id="safety-warnings-list" class="list-none text-gray-300 space-y-2"></ul>
         </div>
 
-        <!-- How to Use Card (Updated from Newting9.png) -->
-        <div class="card p-4 space-y-2">
-            <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"><path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z"/></svg>
-                <h3 class="font-bold text-white">How to Properly Use</h3>
-            </div>
-            <ul id="how-to-use-list" class="list-decimal list-inside text-gray-300 space-y-1"></ul>
+        <!-- Guide Section -->
+        <div class="guide-card p-5 space-y-4">
+            <h3 class="flex items-center gap-2 text-white font-bold">
+                <i class="fas fa-book-open text-gray-400"></i> How to Properly Use
+            </h3>
+            <ol id="usage-list" class="space-y-4 text-sm text-gray-300 leading-relaxed list-decimal ml-4">
+                <!-- Dynamic Content -->
+            </ol>
         </div>
-        
-        <!-- Associated Equipment Card (Updated from Newting10.png) -->
-        <div class="card p-4 space-y-2">
-            <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" style="background: linear-gradient(to right, #6D28D9, #4C1D95); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"><path d="M12 2L4 5v6.09c0 4.54 3.2 8.79 7.5 9.88V22h1v-1.03c4.3-.96 7.5-5.33 7.5-9.88V5L12 2z"/></svg>
-                <h3 class="font-bold text-white">Commonly Associated Equipment</h3>
-            </div>
-            <div id="associated-equipment-list" class="grid grid-cols-2 gap-4 mt-2"></div>
-        </div>
-        
-        <!-- Coming Features -->
-        <div class="space-y-4 pt-4 border-t border-gray-700">
-            <h2 class="text-xl font-bold text-white">Coming Features</h2>
-            <div class="grid grid-cols-1 gap-4">
-                <button id="summarize-button" class="w-full py-3 text-white font-bold rounded-lg gradient-button shadow-md hover:opacity-90 transition-colors duration-200" disabled>
-                    <span class="gradient-text font-bold">✨</span> Summarize Analysis
-                </button>
-                <button id="quiz-button" class="w-full py-3 text-white font-bold rounded-lg gradient-button shadow-md hover:opacity-90 transition-colors duration-200" disabled>
-                    <span class="gradient-text font-bold">✨</span> Generate Study Quiz
-                </button>
-            </div>
-            
-            <div id="additional-results" class="hidden space-y-4">
-                <!-- Summary Result -->
-                <div id="summary-card" class="card p-4 hidden">
-                    <h3 class="font-bold text-gray-200 mb-2">Summary</h3>
-                    <p id="summary-text" class="text-gray-300"></p>
-                </div>
 
-                <!-- Quiz Result -->
-                <div id="quiz-card" class="card p-4 hidden">
-                    <h3 class="font-bold text-bold text-gray-200 mb-2">Study Quiz</h3>
-                    <div id="quiz-questions" class="space-y-6"></div>
-                </div>
+        <!-- Associated Equipment Grid -->
+        <div class="guide-card p-5 space-y-4">
+            <h3 class="flex items-center gap-2 text-white font-bold">
+                <i class="fas fa-project-diagram text-gray-400"></i> Commonly Associated Equipment
+            </h3>
+            <div id="associated-grid" class="grid grid-cols-2 gap-4">
+                <!-- Dynamic Content -->
             </div>
         </div>
     </div>
+
     <script>
-        const API_KEY = "AIzaSyD4CON7omCIemrsI-TzAujg1QUkvmDcLZ0";
-        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY;
-
-        const mainCard = document.getElementById('main-card');
-        const resultsCard = document.getElementById('results-card');
-        const cameraButton = document.getElementById('camera-button');
-        const uploadButton = document.getElementById('upload-button');
+        const apiKey = ""; 
         const fileInput = document.getElementById('file-input');
-        const previewImage = document.getElementById('preview-image');
-        const imagePreviewContainer = document.getElementById('image-preview-container');
-        const analyzeButton = document.getElementById('analyze-button');
-        const messageBox = document.getElementById('message-box');
-        const resultsImagePreview = document.getElementById('results-image-preview');
-        const detectedIssuesCard = document.getElementById('detected-issues-card');
-        const detectedIssuesCount = document.getElementById('detected-issues-count');
-        const detectedIssuesList = document.getElementById('detected-issues-list');
-        const equipmentName = document.getElementById('equipment-name');
-        const equipmentSummary = document.getElementById('equipment-summary');
-        const safetyCard = document.getElementById('safety-card');
-        const safetyWarningsList = document.getElementById('safety-warnings-list');
-        const howToUseList = document.getElementById('how-to-use-list');
-        const associatedEquipmentList = document.getElementById('associated-equipment-list');
-        const promptInput = document.getElementById('prompt-input');
-        const backButton = document.getElementById('back-button');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const statusMsg = document.getElementById('status-msg');
+        let currentBase64 = null;
 
-        let uploadedImageBase64 = '';
-
-        function showMessage(message, type = 'info') {
-            messageBox.textContent = message;
-            messageBox.classList.remove('hidden', 'bg-red-500', 'bg-blue-500', 'bg-green-500');
-            if (type === 'error') {
-                messageBox.classList.add('bg-red-500', 'text-white');
-            } else if (type === 'success') {
-                messageBox.classList.add('bg-green-500', 'text-white');
-            } else {
-                messageBox.classList.add('bg-blue-500', 'text-white');
-            }
-            messageBox.style.display = 'block'; // Ensure the message box is visible
-        }
-
-        // Smooth page transition handler
-        function animatePageTransition(showEl, hideEl, direction = "forward") {
-            // direction: "forward" = slide in from right, "backward" = slide in from left
-            const outTranslate = direction === "forward" ? "-translate-x-10" : "translate-x-10";
-            const inTranslate  = direction === "forward" ? "translate-x-10" : "-translate-x-10";
-
-            // Prepare show element
-            showEl.classList.remove("hidden");
-            showEl.classList.add("opacity-0", inTranslate);
-
-            // Animate hide element out
-            hideEl.classList.add(outTranslate, "opacity-0");
-            hideEl.classList.remove("opacity-100");
-
-            setTimeout(() => {
-                hideEl.classList.add("hidden");
-                hideEl.classList.remove(outTranslate);
-
-                // Animate show element in
-                showEl.classList.remove("opacity-0", inTranslate);
-                showEl.classList.add("opacity-100");
-            }, 300); // matches Tailwind duration
-        }
-
-        // This function now animates instead of instantly swapping
-        function showResultsPage(data) {
-            displayResults(data);
-            animatePageTransition(resultsCard, mainCard, "forward");
-        }
-
-        // Back button animates in reverse
-        backButton.addEventListener('click', () => {
-            animatePageTransition(mainCard, resultsCard, "backward");
-        });
-
-        cameraButton.addEventListener('click', () => fileInput.click());
-        uploadButton.addEventListener('click', () => fileInput.click());
-        
-        fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    previewImage.src = e.target.result;
-                    resultsImagePreview.src = e.target.result;
-                    imagePreviewContainer.classList.remove('hidden');
-                    analyzeButton.disabled = false;
-                    uploadedImageBase64 = e.target.result.split(',')[1];
+                reader.onload = (event) => {
+                    document.getElementById('image-preview').src = event.target.result;
+                    document.getElementById('image-preview').classList.remove('hidden');
+                    document.getElementById('upload-placeholder').classList.add('hidden');
+                    currentBase64 = event.target.result.split(',')[1];
+                    analyzeBtn.disabled = false;
                 };
                 reader.readAsDataURL(file);
             }
         });
 
-        analyzeButton.addEventListener('click', async () => {
-            if (!uploadedImageBase64) {
-                showMessage('Please upload an image first.', 'error');
-                return;
-            }
-
-            analyzeButton.disabled = true;
-            showMessage('Analyzing image...', 'info');
-
-            const userPrompt = promptInput.value.trim();
-            const fullPrompt = `You are a lab equipment analyzer. You will receive an image of a piece of lab equipment. Your task is to analyze the image and the user's optional text prompt to provide the following information in a JSON format. The JSON should have the following structure:
-                {
-                    "equipment_info": {
-                        "name": "The name of the lab equipment.",
-                        "summary": "A brief summary of the equipment's purpose and function."
-                    },
-                    "detected_issues": [
-                        "A list of issues or potential problems detected in the image (e.g., 'cracked glassware', 'loose wire'). If none, return an empty array."
-                    ],
-                    "safety_warnings": [
-                        "A list of key safety precautions when using this equipment.",
-                        "Each item in the list should be a new string."
-                    ],
-                    "how_to_use": [
-                        "Step-by-step instructions on how to use the equipment.",
-                        "Each item in the list should be a new string."
-                    ],
-                    "associated_equipment": [
-                        {
-                            "name": "Name of associated equipment.",
-                            "search_url": "A Google Search URL to find this associated equipment."
-                        }
-                    ]
-                }
-                If you cannot identify the equipment or it is not lab equipment, provide a brief, general description instead of specific details, and fill the other fields with appropriate default values.
-            `;
-
+        // 增强的图片生成函数，包含重试和错误处理
+        async function generateEquipmentImage(equipmentName) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+            const prompt = `A clean, professional studio photograph of ${equipmentName} used in a laboratory setting, isolated on a neutral dark background, high detail.`;
             const payload = {
-                contents: [
-                    {
-                        parts: [
-                            { text: fullPrompt },
-                            {
-                                inlineData: {
-                                    mimeType: "image/png",
-                                    data: uploadedImageBase64
-                                }
-                            }
-                        ]
-                    }
-                ],
+                instances: [{ prompt: prompt }],
+                parameters: { sampleCount: 1 }
             };
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+            for (let i = 0; i < 3; i++) {
+                try {
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    
+                    const result = await res.json();
+                    if (result.predictions && result.predictions[0] && result.predictions[0].bytesBase64Encoded) {
+                        return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                    }
+                } catch (error) {
+                    console.warn(`Attempt ${i+1} failed for ${equipmentName}:`, error);
+                    if (i === 2) return null;
+                    await new Promise(r => setTimeout(r, 1000 * (i + 1)));
                 }
-
-                const result = await response.json();
-                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (text) {
-                    const cleanedText = text.replace(/```json|```/g, '').trim();
-                    const data = JSON.parse(cleanedText);
-                    showResultsPage(data);
-                    showMessage('Analysis complete!', 'success');
-                } else {
-                    throw new Error('No text content received from API.');
-                }
-            } catch (error) {
-                console.error("Analysis failed:", error);
-                showMessage("Failed to get analysis. Please try again.", 'error');
-            } finally {
-                analyzeButton.disabled = false;
             }
-        });
-
-        function displayResults(data) {
-            // Equipment Info
-            const name = data?.equipment_info?.name || "Unidentified Equipment";
-            const summary = data?.equipment_info?.summary || "The API could not provide a specific summary for this equipment.";
-            equipmentName.textContent = name;
-            equipmentSummary.textContent = summary;
-
-            // Detected Issues
-            const issues = data?.detected_issues || [];
-            if (issues.length > 0) {
-                detectedIssuesCard.classList.remove('hidden');
-                detectedIssuesCount.textContent = issues.length;
-                detectedIssuesList.innerHTML = '';
-                issues.forEach(issue => {
-                    const li = document.createElement('li');
-                    li.textContent = `• ${issue}`;
-                    detectedIssuesList.appendChild(li);
-                });
-            } else {
-                detectedIssuesCard.classList.add('hidden');
-            }
-
-            // Safety Warnings
-            const safetyWarnings = data?.safety_warnings || [];
-            if (safetyWarnings.length > 0) {
-                safetyCard.classList.remove('hidden');
-                safetyWarningsList.innerHTML = '';
-                safetyWarnings.forEach(warning => {
-                    const li = document.createElement('li');
-                    li.textContent = `• ${warning}`;
-                    safetyWarningsList.appendChild(li);
-                });
-            } else {
-                safetyCard.classList.add('hidden');
-            }
-
-            // How to Use
-            const howToUse = data?.how_to_use || [];
-            if (howToUse.length > 0) {
-                howToUseList.innerHTML = '';
-                howToUse.forEach(step => {
-                    const li = document.createElement('li');
-                    li.textContent = step;
-                    howToUseList.appendChild(li);
-                });
-            }
-
-            // Associated Equipment
-            const associatedEquipment = data?.associated_equipment || [];
-            associatedEquipmentList.innerHTML = '';
-            associatedEquipment.forEach(item => {
-                const div = document.createElement('div');
-                div.className = "flex flex-col items-center space-y-2";
-                
-                const img = document.createElement('img');
-                img.src = `https://placehold.co/100x100?text=${encodeURIComponent(item.name.split(' ')[0])}`;
-                img.className = "rounded-md";
-                div.appendChild(img);
-
-                const link = document.createElement('a');
-                link.href = item.search_url;
-                link.textContent = item.name;
-                link.target = "_blank";
-                link.className = "text-sm text-gray-400 hover:text-purple-400 font-medium text-center";
-                div.appendChild(link);
-                associatedEquipmentList.appendChild(div);
-            });
+            return null;
         }
+
+        async function analyzeImage() {
+            const context = document.getElementById('context-input').value;
+            analyzeBtn.disabled = true;
+            statusMsg.textContent = "Analyzing hardware details...";
+            statusMsg.classList.remove('hidden');
+
+            const systemPrompt = `You are a Lab Equipment Specialist. Analyze the provided image and context. Return a JSON response matching the structure:
+            {
+                "equipmentName": "Official Name",
+                "issues": [{"title": "Short title", "description": "Details"}],
+                "safety": [{"title": "Warning", "description": "Details"}],
+                "usageSteps": ["Step 1", "Step 2"],
+                "associated": ["Equipment 1", "Equipment 2", "Equipment 3"]
+            }`;
+
+            try {
+                const result = await callGemini(context, currentBase64, systemPrompt);
+                renderResults(result);
+            } catch (error) {
+                statusMsg.textContent = "Error: " + error.message;
+                analyzeBtn.disabled = false;
+            }
+        }
+
+        async function callGemini(prompt, base64, system) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }, { inlineData: { mimeType: "image/png", data: base64 } }] }],
+                systemInstruction: { parts: [{ text: system }] },
+                generationConfig: { responseMimeType: "application/json" }
+            };
+
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const data = await res.json();
+                    return JSON.parse(data.candidates[0].content.parts[0].text);
+                } catch (e) {
+                    if (i === 4) throw e;
+                    await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
+                }
+            }
+        }
+
+        async function renderResults(data) {
+            document.getElementById('main-view').classList.add('hidden');
+            document.getElementById('results-view').classList.remove('hidden');
+            document.getElementById('result-img').src = document.getElementById('image-preview').src;
+            document.getElementById('result-title').textContent = data.equipmentName;
+
+            // 渲染问题列表
+            const issuesContainer = document.getElementById('issues-list');
+            issuesContainer.innerHTML = data.issues.map(issue => `
+                <div class="issue-card p-4 rounded-xl flex gap-3 items-start">
+                    <i class="fas fa-circle-exclamation text-red-400 mt-1"></i>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-red-100 text-sm">${issue.title}</span>
+                            <i class="fas fa-list-ul text-gray-500 text-xs"></i>
+                        </div>
+                        <p class="text-xs text-red-200/70 mt-1 leading-relaxed">${issue.description}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // 渲染安全警告
+            const safetyContainer = document.getElementById('safety-list');
+            safetyContainer.innerHTML = data.safety.map(s => `
+                <div class="safety-card p-4 rounded-xl flex gap-3 items-start">
+                    <i class="fas fa-check text-indigo-400 mt-1"></i>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-indigo-100 text-sm">${s.title}</span>
+                            <i class="fas fa-list-ul text-gray-500 text-xs"></i>
+                        </div>
+                        <p class="text-xs text-indigo-200/70 mt-1 leading-relaxed">${s.description}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // 渲染使用步骤
+            document.getElementById('usage-list').innerHTML = data.usageSteps.map(step => `<li>${step}</li>`).join('');
+
+            // 渲染相关设备网格
+            const grid = document.getElementById('associated-grid');
+            grid.innerHTML = ''; 
+            
+            for (const item of data.associated) {
+                const card = document.createElement('div');
+                card.className = 'space-y-2';
+                
+                const placeholder = document.createElement('div');
+                placeholder.className = 'gear-placeholder';
+                placeholder.innerHTML = '<div class="loading-spinner"></div>';
+                
+                const link = document.createElement('a');
+                link.href = `https://www.google.com/search?q=${encodeURIComponent(item)}`;
+                link.target = "_blank";
+                link.className = "text-[10px] text-blue-400 font-semibold leading-tight hover:underline block";
+                link.textContent = item;
+                
+                card.appendChild(placeholder);
+                card.appendChild(link);
+                grid.appendChild(card);
+                
+                // 异步生成并更新图片
+                generateEquipmentImage(item).then(imgUrl => {
+                    if (imgUrl) {
+                        placeholder.innerHTML = `<img src="${imgUrl}" class="gear-image" alt="${item}">`;
+                    } else {
+                        placeholder.innerHTML = '<i class="fas fa-tools text-2xl"></i>';
+                    }
+                });
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        analyzeBtn.addEventListener('click', analyzeImage);
     </script>
 </body>
 </html>
