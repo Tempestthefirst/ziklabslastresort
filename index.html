@@ -48,6 +48,7 @@
 </head>
 <body class="min-h-screen p-4 md:p-8 flex flex-col items-center">
 
+    <!-- Upload View -->
     <div id="main-view" class="w-full max-w-md space-y-6">
         <div class="flex items-center justify-between mb-8">
             <h1 class="text-2xl font-bold flex items-center gap-2">
@@ -75,6 +76,7 @@
         <div id="status-msg" class="hidden text-center text-sm p-3 rounded-lg bg-indigo-900/20 text-indigo-300"></div>
     </div>
 
+    <!-- Results View -->
     <div id="results-view" class="hidden w-full max-w-lg space-y-6 mb-12">
         <header class="flex items-center gap-4 bg-indigo-600 p-4 -mx-4 md:mx-0 md:rounded-t-xl sticky top-0 z-10">
             <button onclick="window.location.reload()" class="text-white p-2">
@@ -129,6 +131,7 @@
             }
         });
 
+        // 1. Updated: Call Netlify Function for Imagen 4.0
         async function generateEquipmentImage(equipmentName) {
             try {
                 const res = await fetch("/.netlify/functions/imagen", {
@@ -146,6 +149,7 @@
             return `https://images.unsplash.com/photo-1532187875605-2fe3bd84ed5c?auto=format&fit=crop&q=80&w=400`;
         }
 
+        // 2. Updated: Call Netlify Function for Gemini Analysis
         async function analyzeImage() {
             const context = document.getElementById('context-input').value;
             analyzeBtn.disabled = true;
@@ -179,6 +183,7 @@
                 }
                 
                 const data = await res.json();
+                // Extract text from Gemini response structure
                 const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
                 renderResults(JSON.parse(responseText));
             } catch (error) {
@@ -226,9 +231,12 @@
                 card.appendChild(placeholder);
                 card.innerHTML += `<span class="text-[10px] text-blue-400 block truncate text-center">${item}</span>`;
                 grid.appendChild(card);
+                
                 generateEquipmentImage(item).then(imgUrl => {
                     const imgContainer = card.querySelector('.gear-placeholder');
-                    if (imgContainer) imgContainer.innerHTML = `<img src="${imgUrl}" class="gear-image">`;
+                    if (imgContainer) {
+                        imgContainer.innerHTML = `<img src="${imgUrl}" class="gear-image">`;
+                    }
                 });
             });
         }
