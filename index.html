@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZikLabs - Lab Equipment Analysis</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -50,7 +48,6 @@
 </head>
 <body class="min-h-screen p-4 md:p-8 flex flex-col items-center">
 
-    <!-- Upload View -->
     <div id="main-view" class="w-full max-w-md space-y-6">
         <div class="flex items-center justify-between mb-8">
             <h1 class="text-2xl font-bold flex items-center gap-2">
@@ -71,14 +68,13 @@
             <textarea id="context-input" class="w-full bg-[#111322] border border-gray-700 rounded-lg p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Add experiment context (optional)..." rows="2"></textarea>
 
             <button id="analyze-btn" class="w-full py-4 gradient-bg rounded-xl font-bold shadow-lg disabled:opacity-50 transition-all" disabled>
-                Analyze Equipment
+                Analyze via Netlify
             </button>
         </div>
         
         <div id="status-msg" class="hidden text-center text-sm p-3 rounded-lg bg-indigo-900/20 text-indigo-300"></div>
     </div>
 
-    <!-- Results View -->
     <div id="results-view" class="hidden w-full max-w-lg space-y-6 mb-12">
         <header class="flex items-center gap-4 bg-indigo-600 p-4 -mx-4 md:mx-0 md:rounded-t-xl sticky top-0 z-10">
             <button onclick="window.location.reload()" class="text-white p-2">
@@ -133,15 +129,13 @@
             }
         });
 
-        // 1. Updated: Call Netlify Function for Imagen 4.0
         async function generateEquipmentImage(equipmentName) {
             try {
                 const res = await fetch("/.netlify/functions/imagen", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: `Professional laboratory ${equipmentName}` })
+                    body: JSON.stringify({ prompt: `Close-up laboratory ${equipmentName}, high quality` })
                 });
-                
                 if (res.ok) {
                     const result = await res.json();
                     if (result.predictions?.[0]?.bytesBase64Encoded) {
@@ -152,17 +146,16 @@
             return `https://images.unsplash.com/photo-1532187875605-2fe3bd84ed5c?auto=format&fit=crop&q=80&w=400`;
         }
 
-        // 2. Updated: Call Netlify Function for Gemini Analysis
         async function analyzeImage() {
             const context = document.getElementById('context-input').value;
             analyzeBtn.disabled = true;
-            statusMsg.textContent = "Processing via Netlify Function...";
+            statusMsg.textContent = "Requesting Netlify Proxy...";
             statusMsg.classList.remove('hidden');
 
             const payload = {
                 contents: [{ 
                     parts: [
-                        { text: context || "Identify and analyze this lab equipment for issues, safety, and usage." }, 
+                        { text: context || "Identify this lab equipment and return JSON data." }, 
                         { inlineData: { mimeType: "image/png", data: currentBase64 } }
                     ] 
                 }],
@@ -176,14 +169,20 @@
                     body: JSON.stringify(payload)
                 });
 
-                if (!res.ok) throw new Error(`Proxy Error: ${res.status}`);
+                if (res.status === 404) {
+                    throw new Error("Proxy Error 404: Function not found. Check if your file is named 'netlify/functions/analyze.js' on GitHub.");
+                }
+
+                if (!res.ok) {
+                    const errorTxt = await res.text();
+                    throw new Error(`Server Error ${res.status}: ${errorTxt}`);
+                }
                 
                 const data = await res.json();
-                // Extract text from Gemini response structure
                 const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
                 renderResults(JSON.parse(responseText));
             } catch (error) {
-                statusMsg.textContent = "Netlify Error: " + error.message;
+                statusMsg.textContent = error.message;
                 analyzeBtn.disabled = false;
             }
         }
@@ -194,7 +193,7 @@
             document.getElementById('result-img').src = document.getElementById('image-preview').src;
             document.getElementById('result-title').textContent = data.equipmentName;
 
-            document.getElementById('issues-list').innerHTML = data.issues.map(issue => `
+            document.getElementById('issues-list').innerHTML = (data.issues || []).map(issue => `
                 <div class="issue-card p-4 rounded-xl flex gap-3 shadow-md">
                     <i class="fas fa-circle-exclamation text-red-400 mt-1"></i>
                     <div>
@@ -204,7 +203,7 @@
                 </div>
             `).join('');
 
-            document.getElementById('safety-list').innerHTML = data.safety.map(s => `
+            document.getElementById('safety-list').innerHTML = (data.safety || []).map(s => `
                 <div class="safety-card p-4 rounded-xl flex gap-3 shadow-md">
                     <i class="fas fa-shield-virus text-indigo-400 mt-1"></i>
                     <div>
@@ -214,11 +213,11 @@
                 </div>
             `).join('');
 
-            document.getElementById('usage-list').innerHTML = data.usageSteps.map(step => `<li>${step}</li>`).join('');
+            document.getElementById('usage-list').innerHTML = (data.usageSteps || []).map(step => `<li>${step}</li>`).join('');
 
             const grid = document.getElementById('associated-grid');
             grid.innerHTML = ''; 
-            data.associated.forEach(item => {
+            (data.associated || []).forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'space-y-2';
                 const placeholder = document.createElement('div');
@@ -227,14 +226,14 @@
                 card.appendChild(placeholder);
                 card.innerHTML += `<span class="text-[10px] text-blue-400 block truncate text-center">${item}</span>`;
                 grid.appendChild(card);
-                
                 generateEquipmentImage(item).then(imgUrl => {
-                    card.querySelector('.gear-placeholder').innerHTML = `<img src="${imgUrl}" class="gear-image">`;
+                    const imgContainer = card.querySelector('.gear-placeholder');
+                    if (imgContainer) imgContainer.innerHTML = `<img src="${imgUrl}" class="gear-image">`;
                 });
             });
         }
 
-            analyzeBtn.addEventListener('click', analyzeImage);
+        analyzeBtn.addEventListener('click', analyzeImage);
     </script>
 </body>
 </html>
