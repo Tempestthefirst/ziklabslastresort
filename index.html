@@ -47,6 +47,7 @@
             border-radius: 0.75rem;
             aspect-ratio: 1/1;
             overflow: hidden;
+            position: relative;
         }
         .gear-image {
             width: 100%;
@@ -63,7 +64,6 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* 针对 Vercel 移动端浏览器的触摸优化 */
         .active-scale:active {
             transform: scale(0.98);
         }
@@ -156,7 +156,6 @@
     </div>
 
     <script>
-        // API Key is injected at runtime in the preview environment
         const apiKey = ""; 
         const fileInput = document.getElementById('file-input');
         const analyzeBtn = document.getElementById('analyze-btn');
@@ -178,34 +177,29 @@
             }
         });
 
+        // WORKAROUND: Fallback to high-quality Unsplash placeholders if Imagen API is 403 Forbidden
         async function generateEquipmentImage(equipmentName) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
-            const prompt = `A clean, professional studio photograph of ${equipmentName} used in a laboratory setting, isolated on a neutral dark background, high detail.`;
-            const payload = {
-                instances: [{ prompt: prompt }],
-                parameters: { sampleCount: 1 }
-            };
-
-            for (let i = 0; i < 3; i++) {
-                try {
-                    const res = await fetch(url, {
-                        method: 'POST',
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if (!res.ok) throw new Error(`Status ${res.status}`);
-                    
+            const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+            const prompt = `A clean, professional studio photograph of ${equipmentName} used in a laboratory setting.`;
+            
+            try {
+                const res = await fetch(imagenUrl, {
+                    method: 'POST',
+                    body: JSON.stringify({ instances: [{ prompt }], parameters: { sampleCount: 1 } })
+                });
+                
+                if (res.ok) {
                     const result = await res.json();
-                    if (result.predictions && result.predictions[0] && result.predictions[0].bytesBase64Encoded) {
+                    if (result.predictions?.[0]?.bytesBase64Encoded) {
                         return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
                     }
-                } catch (error) {
-                    console.error("Image Generation Error:", error);
-                    if (i === 2) return null;
-                    await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
                 }
+            } catch (error) {
+                console.warn("Imagen API failed or was 403 Forbidden. Using fallback placeholder.");
             }
-            return null;
+            
+            // Fallback: Using Source Unsplash with specific keywords for high-quality lab context
+            return `https://source.unsplash.com/400x400/?laboratory,${encodeURIComponent(equipmentName)}`;
         }
 
         async function analyzeImage() {
@@ -228,48 +222,41 @@
                 renderResults(result);
             } catch (error) {
                 statusMsg.textContent = "Analysis Error: " + error.message;
-                console.error("Analysis Error Details:", error);
                 analyzeBtn.disabled = false;
             }
         }
 
         async function callGemini(prompt, base64, system) {
-            // Updated to use the correct model name for regional preview compatibility
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
             
+            // WORKAROUND: If Vision returns 403, we could theoretically fallback to a text-only prompt describing the user's context.
+            // For now, we optimize the payload to be as compatible as possible.
             const payload = {
                 contents: [{ 
                     parts: [
-                        { text: prompt || "Analyze this lab equipment." }, 
+                        { text: prompt || "Analyze the lab equipment in this image." }, 
                         { inlineData: { mimeType: "image/png", data: base64 } }
                     ] 
                 }],
                 systemInstruction: { parts: [{ text: system }] },
-                generationConfig: { 
-                    responseMimeType: "application/json"
-                }
+                generationConfig: { responseMimeType: "application/json" }
             };
 
             for (let i = 0; i < 5; i++) {
                 try {
-                    const res = await fetch(url, { 
-                        method: 'POST',
-                        body: JSON.stringify(payload) 
-                    });
+                    const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) });
                     
                     if (res.status === 403) {
-                        // Detailed error message if 403 persists, suggesting environment limitation
-                        throw new Error("HTTP 403: Forbidden. This environment or region currently restricts access to this specific model version.");
+                        // If 403, it's a structural/regional restriction. 
+                        // Suggesting the user uses a standard environment if possible.
+                        throw new Error("Access Denied (403). This specific model version is currently restricted in this preview environment.");
                     }
                     
-                    if (!res.ok) {
-                        const errorBody = await res.json().catch(() => ({}));
-                        throw new Error(`HTTP ${res.status}: ${errorBody.error?.message || 'Request Failed'}`);
-                    }
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     
                     const data = await res.json();
                     const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (!textResponse) throw new Error("Empty response from AI.");
+                    if (!textResponse) throw new Error("Empty response.");
                     
                     return JSON.parse(textResponse);
                 } catch (e) {
@@ -285,8 +272,7 @@
             document.getElementById('result-img').src = document.getElementById('image-preview').src;
             document.getElementById('result-title').textContent = data.equipmentName;
 
-            const issuesContainer = document.getElementById('issues-list');
-            issuesContainer.innerHTML = data.issues.map(issue => `
+            document.getElementById('issues-list').innerHTML = data.issues.map(issue => `
                 <div class="issue-card p-4 rounded-xl flex gap-3 items-start shadow-md">
                     <i class="fas fa-circle-exclamation text-red-400 mt-1"></i>
                     <div class="flex-1">
@@ -296,8 +282,7 @@
                 </div>
             `).join('');
 
-            const safetyContainer = document.getElementById('safety-list');
-            safetyContainer.innerHTML = data.safety.map(s => `
+            document.getElementById('safety-list').innerHTML = data.safety.map(s => `
                 <div class="safety-card p-4 rounded-xl flex gap-3 items-start shadow-md">
                     <i class="fas fa-shield-virus text-indigo-400 mt-1"></i>
                     <div class="flex-1">
@@ -326,11 +311,7 @@
                 grid.appendChild(card);
                 
                 generateEquipmentImage(item).then(imgUrl => {
-                    if (imgUrl) {
-                        placeholder.innerHTML = `<img src="${imgUrl}" class="gear-image" alt="${item}" loading="lazy">`;
-                    } else {
-                        placeholder.innerHTML = '<i class="fas fa-microscope text-2xl opacity-50"></i>';
-                    }
+                    placeholder.innerHTML = `<img src="${imgUrl}" class="gear-image" alt="${item}" onerror="this.src='https://via.placeholder.com/400x400/1a1c2e/6366f1?text=${encodeURIComponent(item)}'">`;
                 });
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
