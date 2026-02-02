@@ -116,6 +116,13 @@
         const statusMsg = document.getElementById('status-msg');
         let currentBase64 = null;
 
+        // Helper to get function URL dynamically
+        const getFunctionUrl = (name) => {
+            // If running on a local file or preview, relative paths might fail.
+            // But on Netlify production, /.netlify/functions/ is the standard.
+            return `/.netlify/functions/${name}`;
+        };
+
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -134,7 +141,7 @@
         // 1. Updated: Call Netlify Function for Imagen 4.0
         async function generateEquipmentImage(equipmentName) {
             try {
-                const res = await fetch("/.netlify/functions/imagen", {
+                const res = await fetch(getFunctionUrl("imagen"), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: `Close-up laboratory ${equipmentName}, high quality` })
@@ -167,14 +174,17 @@
             };
 
             try {
-                const res = await fetch("/.netlify/functions/analyze", {
+                const functionUrl = getFunctionUrl("analyze");
+                console.log("Fetching from:", functionUrl);
+                
+                const res = await fetch(functionUrl, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload)
                 });
 
                 if (res.status === 404) {
-                    throw new Error("Proxy Error 404: Function not found. Check if your file is named 'netlify/functions/analyze.js' on GitHub.");
+                    throw new Error(`Proxy Error 404: Function not found at ${functionUrl}. If you are testing in a preview or locally, you must open the actual .netlify.app URL.`);
                 }
 
                 if (!res.ok) {
@@ -183,7 +193,6 @@
                 }
                 
                 const data = await res.json();
-                // Extract text from Gemini response structure
                 const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
                 renderResults(JSON.parse(responseText));
             } catch (error) {
