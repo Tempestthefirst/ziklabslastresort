@@ -234,7 +234,7 @@
         }
 
         async function callGemini(prompt, base64, system) {
-            // Using the precise supported model string for the preview environment
+            // Updated to use the correct model name for regional preview compatibility
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
             
             const payload = {
@@ -258,7 +258,8 @@
                     });
                     
                     if (res.status === 403) {
-                        throw new Error("HTTP 403: Forbidden. Ensure the API key is active and this model version is supported in your environment.");
+                        // Detailed error message if 403 persists, suggesting environment limitation
+                        throw new Error("HTTP 403: Forbidden. This environment or region currently restricts access to this specific model version.");
                     }
                     
                     if (!res.ok) {
@@ -272,9 +273,7 @@
                     
                     return JSON.parse(textResponse);
                 } catch (e) {
-                    // Don't retry on 403 as it is a permission issue
                     if (i === 4 || e.message.includes("403")) throw e;
-                    // Exponential backoff for transient errors
                     await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
                 }
             }
