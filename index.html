@@ -24,60 +24,38 @@
         .gradient-bg {
             background: linear-gradient(135deg, #6D28D9 0%, #4C1D95 100%);
         }
-        .issue-card {
-            background-color: #3d2b2b;
-            border-left: 4px solid #f87171;
-        }
-        .safety-card {
-            background-color: #242a4a;
-            border-left: 4px solid #6366f1;
-        }
-        .guide-card {
-            background-color: #1e213a;
-            border: 1px solid #33385c;
-        }
+        .issue-card { background-color: #3d2b2b; border-left: 4px solid #f87171; }
+        .safety-card { background-color: #242a4a; border-left: 4px solid #6366f1; }
+        .guide-card { background-color: #1e213a; border: 1px solid #33385c; }
         .gear-placeholder {
             background-color: #252945;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #4b527d;
-            font-weight: 700;
-            font-size: 1.5rem;
             border-radius: 0.75rem;
             aspect-ratio: 1/1;
             overflow: hidden;
-            position: relative;
         }
-        .gear-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .gear-image { width: 100%; height: 100%; object-fit: cover; }
         .loading-spinner {
             border: 3px solid rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             border-top: 3px solid #6366f1;
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .active-scale:active {
-            transform: scale(0.98);
-        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 flex flex-col items-center">
 
-    <!-- 上传/初始状态 -->
+    <!-- Upload View -->
     <div id="main-view" class="w-full max-w-md space-y-6">
         <div class="flex items-center justify-between mb-8">
             <h1 class="text-2xl font-bold flex items-center gap-2">
                 <i class="fas fa-flask text-indigo-500"></i> ZikLabs
             </h1>
-            <div class="text-xs text-gray-400 font-mono">2026-02-02 14:02</div>
         </div>
 
         <div class="zik-card p-6 space-y-4 shadow-2xl">
@@ -85,78 +63,56 @@
                 <div id="upload-placeholder" class="text-center">
                     <i class="fas fa-cloud-upload-alt text-4xl text-gray-500 mb-2 group-hover:text-indigo-400 transition-colors"></i>
                     <p class="text-sm font-semibold">Upload Equipment Image</p>
-                    <p class="text-xs text-gray-500 mt-1">Tap to capture or select</p>
                 </div>
-                <img id="image-preview" src="" class="hidden w-full rounded-lg object-cover max-h-48 shadow-lg">
+                <img id="image-preview" src="" class="hidden w-full rounded-lg object-cover max-h-48">
                 <input type="file" id="file-input" class="hidden" accept="image/*">
             </div>
 
-            <textarea id="context-input" class="w-full bg-[#111322] border border-gray-700 rounded-lg p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all" placeholder="Add experiment context (optional)..." rows="2"></textarea>
+            <textarea id="context-input" class="w-full bg-[#111322] border border-gray-700 rounded-lg p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Add experiment context (optional)..." rows="2"></textarea>
 
-            <button id="analyze-btn" class="w-full py-4 gradient-bg rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all active-scale" disabled>
+            <button id="analyze-btn" class="w-full py-4 gradient-bg rounded-xl font-bold shadow-lg disabled:opacity-50 transition-all" disabled>
                 Analyze Equipment
             </button>
         </div>
         
-        <div id="status-msg" class="hidden text-center text-sm p-3 rounded-lg bg-indigo-900/20 text-indigo-300 animate-pulse"></div>
+        <div id="status-msg" class="hidden text-center text-sm p-3 rounded-lg bg-indigo-900/20 text-indigo-300"></div>
     </div>
 
-    <!-- 结果展示 -->
+    <!-- Results View -->
     <div id="results-view" class="hidden w-full max-w-lg space-y-6 mb-12">
-        <header class="flex items-center gap-4 bg-indigo-600 p-4 -mx-4 md:mx-0 md:rounded-t-xl sticky top-0 z-10 shadow-lg">
-            <button onclick="window.location.reload()" class="text-white hover:text-gray-200 p-2">
+        <header class="flex items-center gap-4 bg-indigo-600 p-4 -mx-4 md:mx-0 md:rounded-t-xl sticky top-0 z-10">
+            <button onclick="window.location.reload()" class="text-white p-2">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <h2 id="result-title" class="text-xl font-bold text-white truncate">Equipment Analysis</h2>
+            <h2 id="result-title" class="text-xl font-bold text-white truncate">Analysis Results</h2>
         </header>
 
-        <div class="zik-card overflow-hidden shadow-xl">
-            <img id="result-img" class="w-full h-56 object-cover" src="" alt="Analyzed Equipment">
+        <div class="zik-card overflow-hidden">
+            <img id="result-img" class="w-full h-56 object-cover" src="">
         </div>
 
-        <!-- Detected Issues Section -->
         <div class="space-y-3">
-            <h3 class="flex items-center gap-2 text-red-400 font-bold px-1">
-                <i class="fas fa-exclamation-triangle"></i> Detected Issues
-            </h3>
-            <div id="issues-list" class="space-y-2">
-                <!-- Dynamic Content -->
-            </div>
+            <h3 class="flex items-center gap-2 text-red-400 font-bold px-1"><i class="fas fa-exclamation-triangle"></i> Issues</h3>
+            <div id="issues-list" class="space-y-2"></div>
         </div>
 
-        <!-- Safety Section -->
         <div class="space-y-3">
-            <h3 class="flex items-center gap-2 text-indigo-400 font-bold px-1">
-                <i class="fas fa-shield-alt"></i> Safety Warnings and Precautions
-            </h3>
-            <div id="safety-list" class="space-y-2">
-                <!-- Dynamic Content -->
-            </div>
+            <h3 class="flex items-center gap-2 text-indigo-400 font-bold px-1"><i class="fas fa-shield-alt"></i> Safety</h3>
+            <div id="safety-list" class="space-y-2"></div>
         </div>
 
-        <!-- Guide Section -->
-        <div class="guide-card p-5 space-y-4 rounded-xl shadow-inner">
-            <h3 class="flex items-center gap-2 text-white font-bold">
-                <i class="fas fa-book-open text-gray-400"></i> How to Properly Use
-            </h3>
-            <ol id="usage-list" class="space-y-4 text-sm text-gray-300 leading-relaxed list-decimal ml-4">
-                <!-- Dynamic Content -->
-            </ol>
+        <div class="guide-card p-5 rounded-xl">
+            <h3 class="flex items-center gap-2 text-white font-bold mb-4"><i class="fas fa-book-open"></i> Usage Steps</h3>
+            <ol id="usage-list" class="space-y-4 text-sm text-gray-300 list-decimal ml-4"></ol>
         </div>
 
-        <!-- Associated Equipment Grid -->
-        <div class="guide-card p-5 space-y-4 rounded-xl shadow-inner">
-            <h3 class="flex items-center gap-2 text-white font-bold">
-                <i class="fas fa-project-diagram text-gray-400"></i> Commonly Associated Equipment
-            </h3>
-            <div id="associated-grid" class="grid grid-cols-2 gap-4">
-                <!-- Dynamic Content -->
-            </div>
+        <div class="guide-card p-5 rounded-xl">
+            <h3 class="flex items-center gap-2 text-white font-bold mb-4"><i class="fas fa-project-diagram"></i> Associated Gear</h3>
+            <div id="associated-grid" class="grid grid-cols-2 gap-4"></div>
         </div>
     </div>
 
     <script>
-        const apiKey = ""; 
         const fileInput = document.getElementById('file-input');
         const analyzeBtn = document.getElementById('analyze-btn');
         const statusMsg = document.getElementById('status-msg');
@@ -177,15 +133,13 @@
             }
         });
 
-        // WORKAROUND: Fallback to high-quality Unsplash placeholders if Imagen API is 403 Forbidden
+        // 1. Updated: Call Netlify Function for Imagen 4.0
         async function generateEquipmentImage(equipmentName) {
-            const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
-            const prompt = `A clean, professional studio photograph of ${equipmentName} used in a laboratory setting.`;
-            
             try {
-                const res = await fetch(imagenUrl, {
+                const res = await fetch("/.netlify/functions/imagen", {
                     method: 'POST',
-                    body: JSON.stringify({ instances: [{ prompt }], parameters: { sampleCount: 1 } })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: `Professional laboratory ${equipmentName}` })
                 });
                 
                 if (res.ok) {
@@ -194,100 +148,68 @@
                         return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
                     }
                 }
-            } catch (error) {
-                console.warn("Imagen API failed or was 403 Forbidden. Using fallback placeholder.");
-            }
-            
-            // Fallback: Using Source Unsplash with specific keywords for high-quality lab context
-            return `https://source.unsplash.com/400x400/?laboratory,${encodeURIComponent(equipmentName)}`;
+            } catch (error) { console.error("Imagen Proxy Error:", error); }
+            return `https://images.unsplash.com/photo-1532187875605-2fe3bd84ed5c?auto=format&fit=crop&q=80&w=400`;
         }
 
+        // 2. Updated: Call Netlify Function for Gemini Analysis
         async function analyzeImage() {
             const context = document.getElementById('context-input').value;
             analyzeBtn.disabled = true;
-            statusMsg.textContent = "Processing analysis request...";
+            statusMsg.textContent = "Processing via Netlify Function...";
             statusMsg.classList.remove('hidden');
 
-            const systemPrompt = `You are a Lab Equipment Specialist. Analyze the provided image and context. Return a JSON response matching the structure:
-            {
-                "equipmentName": "Official Name",
-                "issues": [{"title": "Short title", "description": "Details"}],
-                "safety": [{"title": "Warning", "description": "Details"}],
-                "usageSteps": ["Step 1", "Step 2"],
-                "associated": ["Equipment 1", "Equipment 2", "Equipment 3"]
-            }`;
+            const payload = {
+                contents: [{ 
+                    parts: [
+                        { text: context || "Identify and analyze this lab equipment for issues, safety, and usage." }, 
+                        { inlineData: { mimeType: "image/png", data: currentBase64 } }
+                    ] 
+                }],
+                generationConfig: { responseMimeType: "application/json" }
+            };
 
             try {
-                const result = await callGemini(context, currentBase64, systemPrompt);
-                renderResults(result);
+                const res = await fetch("/.netlify/functions/analyze", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!res.ok) throw new Error(`Proxy Error: ${res.status}`);
+                
+                const data = await res.json();
+                // Extract text from Gemini response structure
+                const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                renderResults(JSON.parse(responseText));
             } catch (error) {
-                statusMsg.textContent = "Analysis Error: " + error.message;
+                statusMsg.textContent = "Netlify Error: " + error.message;
                 analyzeBtn.disabled = false;
             }
         }
 
-        async function callGemini(prompt, base64, system) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            
-            // WORKAROUND: If Vision returns 403, we could theoretically fallback to a text-only prompt describing the user's context.
-            // For now, we optimize the payload to be as compatible as possible.
-            const payload = {
-                contents: [{ 
-                    parts: [
-                        { text: prompt || "Analyze the lab equipment in this image." }, 
-                        { inlineData: { mimeType: "image/png", data: base64 } }
-                    ] 
-                }],
-                systemInstruction: { parts: [{ text: system }] },
-                generationConfig: { responseMimeType: "application/json" }
-            };
-
-            for (let i = 0; i < 5; i++) {
-                try {
-                    const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) });
-                    
-                    if (res.status === 403) {
-                        // If 403, it's a structural/regional restriction. 
-                        // Suggesting the user uses a standard environment if possible.
-                        throw new Error("Access Denied (403). This specific model version is currently restricted in this preview environment.");
-                    }
-                    
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    
-                    const data = await res.json();
-                    const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (!textResponse) throw new Error("Empty response.");
-                    
-                    return JSON.parse(textResponse);
-                } catch (e) {
-                    if (i === 4 || e.message.includes("403")) throw e;
-                    await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
-                }
-            }
-        }
-
-        async function renderResults(data) {
+        function renderResults(data) {
             document.getElementById('main-view').classList.add('hidden');
             document.getElementById('results-view').classList.remove('hidden');
             document.getElementById('result-img').src = document.getElementById('image-preview').src;
             document.getElementById('result-title').textContent = data.equipmentName;
 
             document.getElementById('issues-list').innerHTML = data.issues.map(issue => `
-                <div class="issue-card p-4 rounded-xl flex gap-3 items-start shadow-md">
+                <div class="issue-card p-4 rounded-xl flex gap-3 shadow-md">
                     <i class="fas fa-circle-exclamation text-red-400 mt-1"></i>
-                    <div class="flex-1">
+                    <div>
                         <span class="font-bold text-red-100 text-sm">${issue.title}</span>
-                        <p class="text-xs text-red-200/70 mt-1 leading-relaxed">${issue.description}</p>
+                        <p class="text-xs text-red-200/70 mt-1">${issue.description}</p>
                     </div>
                 </div>
             `).join('');
 
             document.getElementById('safety-list').innerHTML = data.safety.map(s => `
-                <div class="safety-card p-4 rounded-xl flex gap-3 items-start shadow-md">
+                <div class="safety-card p-4 rounded-xl flex gap-3 shadow-md">
                     <i class="fas fa-shield-virus text-indigo-400 mt-1"></i>
-                    <div class="flex-1">
+                    <div>
                         <span class="font-bold text-indigo-100 text-sm">${s.title}</span>
-                        <p class="text-xs text-indigo-200/70 mt-1 leading-relaxed">${s.description}</p>
+                        <p class="text-xs text-indigo-200/70 mt-1">${s.description}</p>
                     </div>
                 </div>
             `).join('');
@@ -296,28 +218,23 @@
 
             const grid = document.getElementById('associated-grid');
             grid.innerHTML = ''; 
-            
-            for (const item of data.associated) {
+            data.associated.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'space-y-2';
                 const placeholder = document.createElement('div');
                 placeholder.className = 'gear-placeholder shadow-lg';
                 placeholder.innerHTML = '<div class="loading-spinner"></div>';
-                const link = document.createElement('span');
-                link.className = "text-[10px] text-blue-400 font-semibold block truncate text-center";
-                link.textContent = item;
                 card.appendChild(placeholder);
-                card.appendChild(link);
+                card.innerHTML += `<span class="text-[10px] text-blue-400 block truncate text-center">${item}</span>`;
                 grid.appendChild(card);
                 
                 generateEquipmentImage(item).then(imgUrl => {
-                    placeholder.innerHTML = `<img src="${imgUrl}" class="gear-image" alt="${item}" onerror="this.src='https://via.placeholder.com/400x400/1a1c2e/6366f1?text=${encodeURIComponent(item)}'">`;
+                    card.querySelector('.gear-placeholder').innerHTML = `<img src="${imgUrl}" class="gear-image">`;
                 });
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         }
 
-        analyzeBtn.addEventListener('click', analyzeImage);
+            analyzeBtn.addEventListener('click', analyzeImage);
     </script>
 </body>
 </html>
