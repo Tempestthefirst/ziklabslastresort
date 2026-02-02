@@ -234,15 +234,19 @@
         }
 
         async function callGemini(prompt, base64, system) {
-            // Using the base model version to avoid regional preview restrictions that cause 403s
+            // Using the precise supported model string for the preview environment
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
             
             const payload = {
-                contents: [{ parts: [{ text: prompt || "Analyze this lab equipment." }, { inlineData: { mimeType: "image/png", data: base64 } }] }],
+                contents: [{ 
+                    parts: [
+                        { text: prompt || "Analyze this lab equipment." }, 
+                        { inlineData: { mimeType: "image/png", data: base64 } }
+                    ] 
+                }],
                 systemInstruction: { parts: [{ text: system }] },
                 generationConfig: { 
-                    responseMimeType: "application/json",
-                    temperature: 0.1 
+                    responseMimeType: "application/json"
                 }
             };
 
@@ -254,8 +258,7 @@
                     });
                     
                     if (res.status === 403) {
-                        // Attempt to fallback to a secondary model identifier if supported
-                        throw new Error("HTTP 403: Forbidden. The current API Key or Region doesn't have access to this model version.");
+                        throw new Error("HTTP 403: Forbidden. Ensure the API key is active and this model version is supported in your environment.");
                     }
                     
                     if (!res.ok) {
@@ -264,11 +267,14 @@
                     }
                     
                     const data = await res.json();
-                    if (!data.candidates?.[0]?.content?.parts?.[0]?.text) throw new Error("Empty response from AI.");
-                    return JSON.parse(data.candidates[0].content.parts[0].text);
+                    const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (!textResponse) throw new Error("Empty response from AI.");
+                    
+                    return JSON.parse(textResponse);
                 } catch (e) {
+                    // Don't retry on 403 as it is a permission issue
                     if (i === 4 || e.message.includes("403")) throw e;
-                    // Exponential backoff
+                    // Exponential backoff for transient errors
                     await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
                 }
             }
